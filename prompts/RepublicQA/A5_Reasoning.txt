@@ -1,0 +1,56 @@
+The task is to determine whether the value of the conclusion/question is true/false/uncertain based on the premises.
+-----
+You must refer to the following first-order logic inference rules when making logical inference.
+------
+Input Information:
+
+1. **Semiotic Square** (The statement you need to reason to judge)  
+2. **Formal Premises** extracted from the context
+
+Your goal is to evaluate whether the statement in the goal logically follows from the premises. Analyze step-by-step.
+Please solve the question step by step. During each step, please indicate what first-order logic inference rules you used. Besides, show the inference process by the logical operators including but not limited to: ⊕ (either or), ∨ (disjunction), ∧ (conjunction), → (implication), ∀ (universal), ∃ (existential), ¬ (negation), ↔ (equivalence). You can combine natural language and logical operators when doing inference.
+Please also highlight the final answer as "Final answer: {true/false/uncertain}"
+------
+True: A statement is "true" if it necessarily follows from the given premises using logical rules.
+False: A statement is "false" if it is contradicted by the premises or its negation is logically inferred from them or **if there are counterexamples**.
+Uncertain: A statement is "uncertain" if there is insufficient information in the premises to determine its truth value conclusively.
+------
+Make sure you carefully and fully understand the below requirements before execution the problem:
+1.Please clearly indicate whether the question/conclusion statement is true, false or uncertain using curly bracket {true/false/uncertain}!!! The answer will only be either true, false or uncertain.
+2. Make sure you must only use the premises to infer the conclusion. Do not use any information that is not exist or cannot be inferred from the premises.If some premise is semantically equal, such as "love the most" and "favorite", you can consider this as a valid assumption. You can make assumption to entity if it is very obvious but not logical relationship. For instance, an entity with an obvious human name can be inferred as a human.
+3. Make sure you abide the 16 provided first-order logic rules and formula when making logical inference. You need to clearly indicate what logic rules and formula you used.
+4. Please note that in first-order logic if there exists a conditional statement in the conclusion such as "If...", the if part will be considered as a premise. And if there is premise contradicts the if statement, you need to use the premise in the if statement as priority and neglect the contradicted one.
+5. Be careful with the parentheses. Make sure you following the rules such as Order of Operations (The order is usually: negation (¬), conjunction (and, ∧), disjunction (or, ∨), implication (→), and biconditional (↔). ), Nested Parentheses (The expression inside the innermost set of parentheses is evaluated first, then the next outer set, and so on.). 
+6. Make sure you not only access the premises in first-order logic, but also access its corresponding natural language format. The natural language format premises should be prioritized when there is inconsistent between natural language and first-order logic.
+7. When inferring new knowledge, please clear indicate which premises you used or the steps you refer to. For instance, if you use Premise 1 and a knowledge from Step 5, you should clearly indicate that "Combine Premise 1 and Step 5".
+8. You should also use natural language to explain the logical process in each step. Please also indicate the premises and steps you refer to when making the logical process.
+------
+## Now analyze input
+
+### Goal 
+{target_statement}
+
+### Premises  
+{premises}
+
+### Plan 
+
+{PLAN}
+------
+⚠️ Note: Reasoning steps must strictly follow the PLAN above. Do not add, skip, or reorder steps.
+-----
+### Output JSON Format (place this at the end,Ensure the JSON is valid (no trailing commas)):
+
+```json
+{{
+  "steps": [
+    "Step 1: ...",
+    "Step 2: ...",
+    "...",
+    "Final answer: {true/false/uncertain}"
+  ],
+  "verdict": "True" | "False" | "Uncertain"
+}}
+
+------
+

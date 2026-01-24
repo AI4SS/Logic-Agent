@@ -1,0 +1,126 @@
+You are a formal reasoning expert skilled in translating natural language into precise logical structure.
+
+Your task is to extract a list of key **premises** from the following context.  
+Each premise must be expressed in **two formats**:
+
+1. A concise and accurate **natural-language statement**  
+2. Its corresponding **First-Order Logic (FOL)** expression written in standard predicate logic
+------
+FOL rules:
+1) logical conjunction of expr1 and expr2: expr1 ∧ expr2
+2) logical disjunction of expr1 and expr2: expr1 ∨ expr2
+3) logical exclusive disjunction of expr1 and expr2: expr1 ⊕ expr2
+4) logical negation of expr1: ¬expr1
+5) expr1 implies expr2: expr1 → expr2
+6) expr1 if and only if expr2: expr1 ↔ expr2
+7) logical universal quantification: ∀x
+8) logical existential quantification: ∃x
+------
+⚠️ Conventions & Guidelines
+- Use explicit **action variables** (`a`) for actions like “repaying” or “obeying”, and **object variables** (`x`) for debts, obligations, or rules.
+- Use **person or role variables** (`y`) for entities like people, rulers, citizens, friends.
+- Predicates must apply directly to valid entities or actions — never nest predicates:  
+  ❌ `Just(Repaid(x))` ✅ `Repay(a, x) ∧ Just(a)`
+- Typed variables:
+  `x` → debt / obligation / rule  
+  `a` → action  
+  `y` → person / social role (e.g., friend, ruler, citizen)
+- Focus on extracting premises related to **obligation, justice, causality, moral norms**.
+- Quantifiers:
+  `∀` (for all), `∃` (there exists), and treat `Most` / `Typically` as `∀` (general statements).
+- If the context suggests a causal chain (e.g., *problematic debt → harm → unjust*), **write each causal link as a separate premise** — do not collapse into a single line.
+Below are three illustrative examples:
+────────────────────────────────────
+❌✅ Example 1 · S1 is False
+Context: A debt is generally regarded as an obligation that must be repaid. Repaying debts is commonly seen as a just action. Justice is defined as doing good to friends and avoiding harm. Some debts may not be inherently just or legitimate. Repaying a problematic debt may result in harm.
+
+{{
+  "premises": [
+    {{
+      "statement": "All debts are considered obligations.",
+      "FOL": "∀x (Debt(x) → Obligation(x))"
+    }},
+    {{
+      "statement": "All repayment actions are typically considered just.",
+      "FOL": "∀a∀x (Repay(a,x) → Just(a))"
+    }},
+    {{
+      "statement": "All just actions benefit friends and avoid harm.",
+      "FOL": "∀a (Just(a) → (∀y (Friend(y) → Beneficial(a,y)) ∧ ¬Harm(a)))"
+    }},
+    {{
+      "statement": "Some debts are problematic or illegitimate.",
+      "FOL": "∃x (Debt(x) ∧ Problematic(x))"
+    }},
+    {{
+      "statement": "Some repayment actions on problematic debts cause harm.",
+      "FOL": "∃a∃x (Repay(a,x) ∧ Problematic(x) ∧ Harm(a))"
+    }}
+  ]
+}}
+────────────────────────────────────
+✅ Example 2 · S1 is True  
+Context: Debt is a type of obligation. Repaying debts upholds trust and societal order. Justice is defined as fulfilling obligations. Fulfilling obligations is considered a just action.
+{{
+  "premises": [
+    {{
+      "statement": "All debts are obligations.",
+      "FOL": "∀x (Debt(x) → Obligation(x))"
+    }},
+    {{
+      "statement": "Repaying debts upholds trust and social order.",
+      "FOL": "∀a∀x (Repay(a,x) ∧ Debt(x) → UpholdTrust(a) ∧ UpholdOrder(a))"
+    }},
+    {{
+      "statement": "Justice is defined as fulfilling obligations.",
+      "FOL": "∀a (FulfillObligation(a) → Just(a))"
+    }},
+    {{
+      "statement": "All repayment actions fulfill obligations.",
+      "FOL": "∀a∀x (Repay(a,x) → FulfillObligation(a))"
+    }}
+  ]
+}}
+────────────────────────────────────
+Example 3 · S1 is Uncertain  
+ Example 3 · S1 is Uncertain
+Context: Debt is often seen as an obligation, but the morality of repayment depends on the nature of the debt and the consequences. Justice varies based on context. What is just in one case may not be just in another.
+{{
+  "premises": [
+    {{
+      "statement": "Most debts are seen as obligations.",
+      "FOL": "∀x (Debt(x) → Obligation(x))"
+    }},
+    {{
+      "statement": "The morality of repaying debts depends on debt nature and consequences.",
+      "FOL": "∀a∀x (Repay(a,x) → DependsOn(Nature(x)) ∧ DependsOn(Consequences(a)))"
+    }},
+    {{
+      "statement": "Justice varies based on context.",
+      "FOL": "∀a (Just(a) → ContextDependent(a))"
+    }},
+    {{
+      "statement": "Some actions may be just in one context but unjust in another.",
+      "FOL": "∃a∃c1∃c2 (Just(a,c1) ∧ ¬Just(a,c2))"
+    }}
+  ]
+}}
+────────────────────────────────────
+Below is the information you need to deal with right now.
+------
+Context:
+{context}
+
+------
+Return your answer in **exactly** this JSON format:
+```json
+{{
+  "premises": [
+    {{
+      "statement": "...",
+      "FOL": "..."
+    }}
+    ...
+  ]
+}}
+```

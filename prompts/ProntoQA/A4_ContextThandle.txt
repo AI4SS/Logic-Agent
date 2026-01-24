@@ -1,0 +1,84 @@
+You are a formal reasoning expert skilled in symbolic logic and property inheritance chains.
+
+Your task is to extract a list of key **semantic premises** from the following context.  
+Each premise must be expressed in **two formats**:
+
+1. A concise **natural language statement**  
+2. Its corresponding **First-Order Logic (FOL)** expression using proper predicates
+
+------
+⚠️ FOL Writing Guidelines:
+- Use unary predicates for **properties**: `Aggressive(x)`, `Sour(x)`, `Red(x)`
+- Use binary predicates for **type inheritance**: `IsA(x, Yumpus)`, `IsA(x, Dumpus)`
+- For general rules: `∀x (IsA(x, Yumpus) → Aggressive(x))`  
+- For entity facts: `IsA(Max, Yumpus)` or `Sour(Max)`
+- Do NOT write nested predicates (e.g. `Sour(IsA(x, Dumpus))` ❌)
+
+------
+Context:
+{context}
+
+------
+Return your answer in exactly this JSON format:
+```json
+{{
+  "premises": [
+    {{
+      "statement": "...",
+      "FOL": "..."
+    }},
+    ...
+  ]
+}}
+
+------
+Below is an example:
+
+Context excerpt:
+"Max is a yumpus. Each yumpus is a dumpus. Dumpuses are wumpuses. Wumpuses are impuses. Impuses are tumpuses. Tumpuses are not sour."
+
+Premises:
+
+Max is a yumpus.
+FOL: IsA(Max, Yumpus)
+
+Every yumpus is a dumpus.
+FOL: ∀x (IsA(x, Yumpus) → IsA(x, Dumpus))
+
+Every dumpus is a wumpus.
+FOL: ∀x (IsA(x, Dumpus) → IsA(x, Wumpus))
+
+Every wumpus is an impus.
+FOL: ∀x (IsA(x, Wumpus) → IsA(x, Impus))
+
+Every impus is a tumpus.
+FOL: ∀x (IsA(x, Impus) → IsA(x, Tumpus))
+
+Tumpuses are not sour.
+FOL: ∀x (IsA(x, Tumpus) → ¬Sour(x))
+
+---
+Below is an example:
+
+Context excerpt:
+"Stella is a yumpus. Yumpuses are zumpuses. Zumpuses are impuses. Each impus is a dumpus. Each dumpus is a vumpus. Vumpuses are bright."
+
+Premises:
+
+Stella is a yumpus.
+FOL: IsA(Stella, Yumpus)
+
+Every yumpus is a zumpus.
+FOL: ∀x (IsA(x, Yumpus) → IsA(x, Zumpus))
+
+Every zumpus is an impus.
+FOL: ∀x (IsA(x, Zumpus) → IsA(x, Impus))
+
+Every impus is a dumpus.
+FOL: ∀x (IsA(x, Impus) → IsA(x, Dumpus))
+
+Every dumpus is a vumpus.
+FOL: ∀x (IsA(x, Dumpus) → IsA(x, Vumpus))
+
+Every vumpus is bright.
+FOL: ∀x (IsA(x, Vumpus) → Bright(x))

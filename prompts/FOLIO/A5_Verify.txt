@@ -1,0 +1,381 @@
+The task is to verify whether the original execution correctly determines the value of the given conclusion based on the context.
+
+You should abide by **first-order logic (FOL)** rules when checking the original execution and its conclusion.
+
+---
+
+## Logical Verification Guidelines:
+
+### 1. Valid Inference Rules
+Check whether the reasoning follows classical FOL inference rules, such as:
+- **Modus Ponens**: If \( P \rightarrow Q \) and \( P \), then \( Q \).
+- **Modus Tollens**: If \( P \rightarrow Q \) and \( \neg Q \), then \( \neg P \).
+
+### 2. Assumption and Consistency Checking
+- If an assumption is made, determine whether it follows **valid logical practice** (e.g., proof by contradiction).
+- Verify whether each step builds only on already established or assumed truths.
+- Assumptions to test for contradiction (such as assuming the conclusion is true to derive a contradiction) are valid and should be analyzed for effectiveness.
+
+### 3. Logical Path Validation
+- Ensure the reasoning chain is complete and logically sound.
+- Check whether any step introduces unjustified gaps or invalid leaps.
+
+### 4. Refinement of Logical Process
+- If any step is invalid or incomplete, reconstruct the logic using only valid premises and inferences.
+- Preserve as much of the original valid reasoning as possible.
+
+### 5. Conditional Statement Semantics
+- For any statement of the form \( P \rightarrow Q \), it is **false only if** \( P \) is true and \( Q \) is false.
+- In all other cases, the conditional is considered true.
+
+### 6. Detailed Step-by-Step Validation
+If applicable, break down the reasoning process:
+- Identify the conclusion being validated.
+- Match each reasoning step to a rule or a known fact.
+- Explicitly mark any contradictions or missing justifications.
+
+---
+
+## Special Rules (Additional)
+
+### 7. **Always prioritize verifying S1**:
+- If the reasoning chain for S1 is logically valid and its verdict is justified, then return the verdict of S1 directly.
+- Do **not** proceed to S2 even if `S2_type = contradictory`.
+
+### 8. **Fallback to S2 only when S1's  reasoning is invalid**:
+Then，if S2's  reasoning is valid:
+    - If `S2.verdict == Uncertain`, return `"verdict": "Uncertain"`
+    - If `S2.verdict == True`, return `"verdict": "False"` (since S2 contradicts S1)
+    - If `S2.verdict == False`, return `"verdict": "True"` (since S2 contradicts S1)
+
+- Note: If S1’s verdict is Uncertain but the logic is valid and sound, do **not** fallback to S2. The final verdict remains `"Uncertain"` in this case.
+-----
+Below is an example:
+### S1
+
+```json
+{{
+  "statement": "KiKi is terricolous.",
+  "FOL": "Terricolous(KiKi)",
+  "premises": {{
+    "Predicates": [
+      "Barks(x) ::: x barks.",
+      "Likes(jane, x) ::: Jane likes x.",
+      "Dog(x) ::: x is a dog.",
+      "Animal(x) ::: x is an animal.",
+      "Jumps(x) ::: x jumps.",
+      "HasLegs(x) ::: x has legs.",
+      "Terricolous(x) ::: x is terricolous.",
+      "KiKi(x) ::: x refers to KiKi."
+    ],
+    "Premises": [
+      "∀x (Barks(x) → ¬Likes(jane, x))",
+      "∀x (Dog(x) → Barks(x)) ∧ ∀x (Dog(x) → Animal(x))",
+      "∀x (Jumps(x) → Likes(jane, x))",
+      "∀x (HasLegs(x) → Jumps(x))",
+      "∀x (Terricolous(x) → HasLegs(x))",
+      "(¬Jumps(KiKi) ∧ ¬HasLegs(KiKi)) → (Terricolous(KiKi) ∨ HasLegs(KiKi))"
+    ],
+    "Conclusion": [
+      "Terricolous(KiKi)"
+    ]
+  }},
+  "reasoning_steps": [
+    "Step 1: Identify the Goal - Determine if Terricolous(KiKi) can be inferred from the given premises.",
+    "Step 2: Consider the conditional (¬Jumps(KiKi) ∧ ¬HasLegs(KiKi)) → (Terricolous(KiKi) ∨ HasLegs(KiKi)).",
+    "Step 3: We do not know whether Jumps(KiKi) or HasLegs(KiKi), so we cannot assume the antecedent is true.",
+    "Step 4: Terricolous(KiKi) → HasLegs(KiKi) (Premise 5), and HasLegs(x) → Jumps(x) (Premise 4). So Terricolous(KiKi) implies Jumps(KiKi).",
+    "Step 5: The chain Terricolous(KiKi) ⇒ HasLegs(KiKi) ⇒ Jumps(KiKi) ⇒ Likes(jane, KiKi) provides some entailments, but does not prove Terricolous(KiKi) directly.",
+    "Step 6: No premise directly asserts or denies Terricolous(KiKi), and no contradiction arises whether it holds or not.",
+    "Final Step: The truth of Terricolous(KiKi) cannot be determined from the premises provided."
+  ],
+  "verdict": "Uncertain"
+}}
+
+S2_type: "contradictory"
+{{
+  "statement": "KiKi is not terricolous.",
+  "FOL": "¬Terricolous(KiKi)",
+  "premises": {{
+    "Predicates": [
+      "Barks(x) ::: x barks.",
+      "Likes(y, x) ::: y likes x.",
+      "Dog(x) ::: x is a dog.",
+      "Animal(x) ::: x is an animal.",
+      "Jumps(x) ::: x jumps.",
+      "HasLegs(x) ::: x has legs.",
+      "Terricolous(x) ::: x is terricolous.",
+      "KiKi(x) ::: x refers to KiKi."
+    ],
+    "Premises": [
+      "∀x (Barks(x) → ¬Likes(jane, x))",
+      "∀x (Dog(x) → Barks(x)) ∧ ∀x (Dog(x) → Animal(x))",
+      "∀x (Jumps(x) → Likes(jane, x))",
+      "∀x (HasLegs(x) → Jumps(x))",
+      "∀x (Terricolous(x) → HasLegs(x))",
+      "(¬Jumps(KiKi) ∧ ¬HasLegs(KiKi)) → (Terricolous(KiKi) ∨ HasLegs(KiKi))"
+    ],
+    "Conclusion": [
+      "¬Terricolous(KiKi)"
+    ]
+  }},
+  "reasoning_steps": [
+    "Step 1: Analyze Premise 6: (¬Jumps(KiKi) ∧ ¬HasLegs(KiKi)) → (Terricolous(KiKi) ∨ HasLegs(KiKi)).",
+    "Step 2: Use Premise 5: ∀x (Terricolous(x) → HasLegs(x)) ⇒ Terricolous(KiKi) → HasLegs(KiKi).",
+    "Step 3: Apply contrapositive of Premise 4: ∀x (¬Jumps(x) → ¬HasLegs(x)). So ¬Jumps(KiKi) ⇒ ¬HasLegs(KiKi).",
+    "Step 4: Assume ¬Jumps(KiKi). Then by Step 3, ¬HasLegs(KiKi).",
+    "Step 5: If HasLegs(KiKi) is false, then by contrapositive of Premise 5, Terricolous(KiKi) is false.",
+    "Step 6: Thus, under the assumption ¬Jumps(KiKi), we conclude ¬Terricolous(KiKi).",
+    "Step 7: This contradicts Premise 6 if Terricolous(KiKi) ∨ HasLegs(KiKi) is required, but since the antecedent is not known to be true, the contradiction is conditional.",
+    "Final Step: The argument relies on assuming ¬Jumps(KiKi) and chaining implications backward, but the premises do not establish ¬Jumps(KiKi) directly. The deduction depends on hypothetical reasoning and cannot prove ¬Terricolous(KiKi) definitively."
+  ],
+  "verdict": "False"
+}}
+
+### Verification
+
+To verify the execution, we examine whether the verdict for **S1** is logically justified under the given premises. Since **S1's verdict is "Uncertain"**, we must determine whether this conclusion is logically sound. Only if it is invalid do we proceed to check **S2** (given S2_type = contradictory).
+
+#### 1. Identify the Goal
+
+The goal is to determine whether the statement:
+
+Terricolous(KiKi)
+
+is provable from the given premises.
+
+#### 2. Evaluate the Premises
+
+Relevant logical relations from the context:
+
+- ∀x (Terricolous(x) → HasLegs(x))  
+- ∀x (HasLegs(x) → Jumps(x))  
+- ∀x (Jumps(x) → Likes(jane, x))  
+- (¬Jumps(KiKi) ∧ ¬HasLegs(KiKi)) → (Terricolous(KiKi) ∨ HasLegs(KiKi))
+
+However, we are **not given** any of the following:
+
+- Jumps(KiKi)  
+- ¬Jumps(KiKi)  
+- HasLegs(KiKi)  
+- ¬HasLegs(KiKi)  
+- Terricolous(KiKi)  
+- ¬Terricolous(KiKi)
+
+#### 3. Logical Deduction of S1
+
+We can deduce:
+
+- Terricolous(KiKi) → HasLegs(KiKi)  
+- HasLegs(KiKi) → Jumps(KiKi)  
+- Jumps(KiKi) → Likes(jane, KiKi)
+
+So:
+
+Terricolous(KiKi) → Likes(jane, KiKi)
+
+However, this chain **only provides a forward implication**. It does **not confirm** whether Terricolous(KiKi) is true.
+
+The conditional:
+
+(¬Jumps(KiKi) ∧ ¬HasLegs(KiKi)) → (Terricolous(KiKi) ∨ HasLegs(KiKi))
+
+cannot be used to infer Terricolous(KiKi), because the antecedent (¬Jumps(KiKi) ∧ ¬HasLegs(KiKi)) is not known to be true.
+
+#### 4. Verdict Justification
+
+- The conclusion Terricolous(KiKi) is **not derivable** from the premises.  
+- The reasoning does **not contain any contradiction or invalid inference**.  
+- The uncertainty in the verdict is due to the **lack of known truth values** for HasLegs(KiKi) or Jumps(KiKi).
+
+Therefore, the verdict **"Uncertain"** is **logically correct**.
+
+#### 5. No Need for S2 Fallback
+
+Since S1 is **correctly labeled as Uncertain**, we do **not** need to evaluate S2, even though:
+
+S2_type = contradictory
+
+Fallback to S2 is only required if S1 reasoning is **invalid**, which is **not the case here**.
+
+#### 6. Final Conclusion
+
+```json
+{{ "verdict": "Uncertain" }}
+
+-----
+
+Below is an example:
+
+### S1
+
+```json
+{{
+  "statement": "Ailton Silva does not play for a football club.",
+  "FOL": "¬PlaysForFootballClub(AiltonSilva)",
+  "premises": {{
+    "Predicates": [
+      "BornIn(x, y) ::: x was born in year y.",
+      "KnownAs(x, y) ::: x is commonly known as y.",
+      "FootballPlayer(x) ::: x is a football player.",
+      "LoanedOutTo(x, y) ::: x was loaned out to team y.",
+      "PlaysFor(x, y) ::: x plays for team y.",
+      "Brazillian(x) ::: x is Brazillian.",
+      "FootballClub(x) ::: x is a football club."
+    ],
+    "Premises": [
+      "BornIn(AiltonSilva, year1995) ∧ KnownAs(AiltonSilva, Ailton) ::: Ailton Silva, born in 1995, is commonly known as Ailton.",
+      "FootballPlayer(AiltonSilva) ∧ LoanedOutTo(AiltonSilva, Braga) ::: Ailton is a football player who was loaned out to Braga.",
+      "Brazillian(AiltonSilva) ∧ PlaysFor(AiltonSilva, Nautico) ::: Ailton Silva is a Brazillian footballer who plays for Nautico.",
+      "FootballClub(Nautico) ∧ FootballClub(Braga) ::: Nautico and Braga are football clubs.",
+      "FootballClub(Fluminense) ::: Fluminense is a football club."
+    ],
+    "Conclusion": [
+      "¬PlaysFor(AiltonSilva, x) ∨ ¬FootballClub(x) ::: Ailton Silva does not play for a football club."
+    ]
+  }},
+  "reasoning_steps": [
+    "Step 1: Identify the Goal - To prove or disprove that Ailton Silva does not play for any football club (¬PlaysForFootballClub(AiltonSilva)).",
+    "Step 2: Analyze Premise 3 which states that Ailton Silva plays for Nautico (PlaysFor(AiltonSilva, Nautico)) and Nautico is a football club (FootballClub(Nautico)). This directly contradicts the conclusion.",
+    "Step 3: Use Premise 4 to confirm that Nautico is indeed a football club (FootballClub(Nautico)), reinforcing the contradiction with the conclusion.",
+    "Step 4: Apply Modus Ponens using Premises 3 and 4 to infer that Ailton Silva plays for a football club, which directly contradicts ¬PlaysForFootballClub(AiltonSilva).",
+    "Step 5: Consider if there are any premises or logical rules that could introduce uncertainty about the conclusion. In this case, no such premises exist.",
+    "Final Step: Determine whether the conclusion is true, false, or uncertain based on the deduction steps. Given the direct contradiction with Premise 3 and Premise 4, the conclusion ¬PlaysForFootballClub(AiltonSilva) cannot be proven using the given premises."
+  ],
+  "verdict": "Uncertain"
+}}
+
+S2_type: "contradictory"
+{{
+  "statement": "Ailton Silva plays for a football club.",
+  "FOL": "PlaysForFootballClub(AiltonSilva)",
+  "premises":{ {
+    "Predicates": [
+      "BornIn(x, year) ::: x was born in the specified year.",
+      "KnownAs(x, y) ::: x is commonly known as y.",
+      "FootballPlayer(x) ::: x is a football player.",
+      "LoanedOutTo(x, y) ::: x was loaned out to team y.",
+      "PlaysFor(x, y) ::: x plays for team y.",
+      "Brazillian(x) ::: x is Brazillian.",
+      "FootballClub(x) ::: x is a football club."
+    ],
+    "Premises": [
+      "BornIn(AiltonSilva, year1995) ∧ KnownAs(AiltonSilva, Ailton) ::: Ailton Silva, born in 1995, is commonly known as Ailton.",
+      "FootballPlayer(AiltonSilva) ∧ LoanedOutTo(AiltonSilva, Braga) ::: Ailton is a football player who was loaned out to Braga.",
+      "Brazillian(AiltonSilva) ∧ PlaysFor(AiltonSilva, Nautico) ::: Ailton Silva is a Brazillian footballer who plays for Nautico.",
+      "FootballClub(Nautico) ∧ FootballClub(Braga) ::: Nautico and Braga are football clubs.",
+      "FootballClub(Fluminense) ::: Fluminense is a football club."
+    ],
+    "Conclusion": [
+      "PlaysFor(AiltonSilva, x) ∧ FootballClub(x)"
+    ]
+  }},
+  "reasoning_steps": [
+    "Step 1: Identify the Goal: The goal is to prove or disprove that Ailton Silva plays for a football club (PlaysForFootballClub(AiltonSilva)).",
+    "Step 2: Utilize Premise 3: From the premise, we know that Ailton Silva plays for Nautico (PlaysFor(AiltonSilva, Nautico)) and that Nautico is a football club (FootballClub(Nautico)). This provides us with an instance of a team that Ailton Silva plays for which is also classified as a football club.",
+    "Step 3: Apply Premise 4: From the premise, we know that Nautico is indeed a football club (FootballClub(Nautico)), confirming that the team Ailton Silva plays for is a football club.",
+    "Step 4: Combine Steps 2 and 3: Since it has been established that Ailton Silva plays for Nautico and Nautico is a football club, we can infer that Ailton Silva plays for at least one football club (PlaysFor(AiltonSilva, x) ∧ FootballClub(x)).",
+    "Step 5: Consider Premise 2: Although it states that Ailton was loaned out to Braga, this does not negate the fact established in Step 4. It only adds another team he has played for.",
+    "Final answer: {true}"
+  ],
+  "verdict": "True"
+}}
+
+### Verification
+
+To verify the execution, we analyze the logical reasoning for S1 and determine whether its verdict ("Uncertain") is valid under first-order logic (FOL). If it is not, and S2 is its contradictory counterpart and correctly reasoned, we fall back to S2 and output the logically opposite verdict.
+
+#### 1. Identify the Goal of S1
+
+The statement to evaluate is:
+
+**S1:** ¬PlaysForFootballClub(AiltonSilva)
+
+This asserts that Ailton Silva does **not** play for any football club.
+
+#### 2. Evaluate the Premises
+
+We focus on the following key premises from the context:
+
+- **Premise 3:** PlaysFor(AiltonSilva, Nautico)
+- **Premise 4:** FootballClub(Nautico)
+
+These two together give us:
+
+- Ailton Silva **plays for** Nautico  
+- Nautico **is a** football club
+
+Thus, by combining them:
+
+PlaysFor(AiltonSilva, Nautico)  
+∧ FootballClub(Nautico)  
+⇒ PlaysForFootballClub(AiltonSilva)
+
+So the statement ¬PlaysForFootballClub(AiltonSilva) is directly **contradicted** by the premises.
+
+#### 3. Logical Deduction of S1
+
+Applying **Modus Ponens** step-by-step:
+
+- P₁: PlaysFor(AiltonSilva, Nautico)  
+- P₂: FootballClub(Nautico)  
+- Therefore: PlaysForFootballClub(AiltonSilva)
+
+This is a direct application of:
+
+PlaysFor(x, y) ∧ FootballClub(y) ⇒ PlaysForFootballClub(x)
+
+Hence, we logically derive:
+
+PlaysForFootballClub(AiltonSilva)
+
+Therefore, the conclusion ¬PlaysForFootballClub(AiltonSilva) is **false**.
+
+#### 4. Does S1's Reasoning Abide by FOL?
+
+No.
+
+The original execution concludes S1 is "Uncertain", but the contradiction is **clear and immediate**. There is no ambiguity in the premises or inference.
+
+Thus, labeling the verdict as "Uncertain" is a logical **error**.
+
+The correct verdict for S1 should have been **False**.
+
+#### 5. Handling of Contradictory S2
+
+Given:
+
+- S1 is incorrectly labeled "Uncertain"
+- S2_type = contradictory
+- S2 is correctly inferred as **True**
+
+According to classical logic, if S2 contradicts S1 and is **True**, then S1 must be **False**.
+
+That is:
+
+S2 = ¬S1 = True  
+⇒ S1 = False
+
+#### 6. Final Conclusion
+
+```json
+{{ "verdict": "False" }}
+
+-----
+
+### Below is the one you need to verify:
+
+**Original Execution:**  
+[[EXECUTION]]
+
+-----
+
+### Verify:  
+Please indicate the revised answer at the end using curly brackets. The answer must be one of:
+
+```json
+{{
+  "verdict": "True" | "False" | "Uncertain",
+}}
+
+Please note that if the original reasoning and verdict are correct, you must retain the original answer. For example, if the original answer is {uncertain} and your audit finds the logic sound, return {uncertain} as the final answer.

@@ -1,0 +1,170 @@
+You are a symbolic reasoning expert skilled in logic-based natural language understanding.
+
+Your task is to determine whether the proposition **S1** from a Semiotic Square is **True** or **False**, based on:
+
+1. Natural language premises (facts, subclass chains, properties)
+2. Their corresponding First-Order Logic (FOL) forms
+3. Four propositions from a Semiotic Square: S1, S2, ¬S1, ¬S2 (each with both statement and FOL)
+
+------
+Your job is to assess whether S1 can be logically **entailed** or **refuted**, based on chaining subclass relationships and entity properties through the FOL structure.
+
+------
+## Determination Rules
+
+- **S1 is True** if all of the following conditions are met:
+  1. There exists at least one **valid reasoning chain** from the premises that **logically entails** the predicate in S1.
+     - A valid reasoning chain is a series of subclass or property inheritance steps (e.g., A(x) → B(x) → C(x)) where the final predicate matches S1's conclusion.
+  2. There is **no reasoning chain** that leads to **S2**.
+     - This means the contrary statement of S1 cannot be derived using the same reasoning mechanisms.
+  3. There is **no chain** that leads to **¬S1**.
+     - That is, no negation of S1’s predicate is derivable through subclass/property inversion.
+
+- **S1 is False** if **any** of the following is true:
+  1. A reasoning chain leads directly to **S2**.
+     - That is, from entity membership and subclass/property chains, one can derive the conclusion stated in S2.
+  2. A reasoning chain proves **¬S1**.
+     - This occurs if, starting from the subject entity, the negation of S1's predicate is reached through logical inheritance or definition.
+  3. **No valid reasoning chain exists to derive S1**, and no contradiction blocks the derivation of S2 or ¬S1.
+     - That is, if S1 cannot be proven true from any combination of premises, then it must be labeled as False.
+
+- Important:
+  - A reasoning chain is only valid if:
+    - All steps are justified by premises (subclass or property assertions)
+    - The entity involved is explicitly or transitively linked via subclass relations to the final predicate
+  - You must always prefer definitive chains over ambiguity.
+  - Do not assume missing links; if a chain cannot be constructed, S1 is not entailed.
+
+- “Uncertain” is disallowed:
+  - If S1 cannot be derived, it is treated as False.
+  - Only derivation of S1 with no contradiction validates True.
+
+Always combine subclass and attribute chains when necessary.  
+
+------
+Your Input:
+
+### Question:
+{question}
+
+### Premises:
+{premises}
+
+### Semiotic Square:
+{semiotic_square}
+
+------
+Output format:
+
+```json
+{{
+  "s1_truth": "True" | "False",
+  "explanation": [
+    "...explanation of each step...",
+    "...",
+    "Therefore, S1 is (s1_truth)."
+  ]
+}}
+------
+
+Below is an example:
+
+**Question:** Is Max sour?
+
+**Premises:**
+
+Max is a yumpus.
+FOL: IsA(Max, Yumpus)
+
+Each yumpus is a dumpus.
+FOL: ∀x (Yumpus(x) → Dumpus(x))
+
+Each dumpus is a wumpus.
+FOL: ∀x (Dumpus(x) → Wumpus(x))
+
+Every wumpus is an impus.
+FOL: ∀x (Wumpus(x) → Impus(x))
+
+Each impus is a tumpus.
+FOL: ∀x (Impus(x) → Tumpus(x))
+
+Tumpuses are not sour.
+FOL: ∀x (Tumpus(x) → ¬Sour(x))
+
+**Semiotic Square:**
+S1: Max is sour.
+FOL: Sour(Max)
+
+S2: Max is not sour.
+FOL: ¬Sour(Max)
+
+¬S1: Max is not sour.
+FOL: ¬Sour(Max)
+
+¬S2: Max is sour.
+FOL: Sour(Max)
+
+**Reasoning:**
+
+Max is a yumpus.
+
+By inheritance: Yumpus → Dumpus → Wumpus → Impus → Tumpus
+
+Tumpus implies ¬Sour
+
+So Max is a Tumpus ⇒ ¬Sour(Max)
+
+Therefore, S1 (Sour(Max)) is False.
+
+------
+
+Below is an example:
+
+Question: Is Stella bright?
+
+Premises:
+
+Stella is a yumpus.
+FOL: IsA(Stella, Yumpus)
+
+Yumpuses are zumpuses.
+FOL: ∀x (Yumpus(x) → Zumpus(x))
+
+Zumpuses are impuses.
+FOL: ∀x (Zumpus(x) → Impus(x))
+
+Each impus is a dumpus.
+FOL: ∀x (Impus(x) → Dumpus(x))
+
+Each dumpus is a vumpus.
+FOL: ∀x (Dumpus(x) → Vumpus(x))
+
+Vumpuses are bright.
+FOL: ∀x (Vumpus(x) → Bright(x))
+
+Semiotic Square:
+S1: Stella is bright.
+FOL: Bright(Stella)
+
+S2: Stella is not bright.
+FOL: ¬Bright(Stella)
+
+¬S1: Stella is not bright.
+FOL: ¬Bright(Stella)
+
+¬S2: Stella is bright.
+FOL: Bright(Stella)
+
+Reasoning:
+
+Stella is a yumpus.
+
+Yumpus → Zumpus → Impus → Dumpus → Vumpus
+
+Vumpus implies Bright
+
+So Stella inherits Bright ⇒ Bright(Stella)
+
+Therefore, S1 is True.
+
+

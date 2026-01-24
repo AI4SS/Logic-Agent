@@ -1,0 +1,114 @@
+The task is to verify whether the original execution correctly determines the value of the given conclusion based on the context. You should abide by the first-order-logic rules when checking original execution and the conclusion.
+
+-----
+
+When verifying the logical process and the final answer, make sure you fully consider the following aspects before verification:
+
+1. First-Order Logic Compliance
+Whether the logical process abides by the first-order logic inference rules such as Modus Tollens and Modus Ponens.
+
+2. Assumption and Consistency Verification
+- Carefully check if the logical process makes any invalid assumptions
+- Determine if the assumption is a part of a valid logical method, such as proof by contradiction
+- Acknowledge that using conclusion as a true premise to verify whether there is contradiction in conclusion should be seen as a valid assumption
+- Ensure that information used in a step has been correctly inferred from previous steps and is treated as a valid premise for subsequent reasoning
+- Evaluate if the conclusion drawn from these assumptions aligns with logical principles
+
+3. Correct Logical Path
+Assess whether the logical process correctly follows a path that leads to the conclusion based on the premises and valid inferences. Identify any gaps or errors in the reasoning.
+
+4. Refinement of Logical Process
+If the original execution violates any of the above steps, refine the logical process. Use the relevant premises and information correctly derived from previous steps to create a more accurate logical deduction.
+
+5. Handling of Conditional Statements
+For conclusions containing conditional statements (e.g., "If..."), remember that in first-order logic, a conditional statement is considered false only when the antecedent is true and the consequent is false. In all other cases, the conditional statement is considered true.
+
+6. Detailed Analysis Requirement
+If applicable, please provide a detailed analysis of each step in the logical process and a refined answer at the end, using the format {true/false/uncertain}. The answer should be one of these three options.
+
+7.If there is not serious logic problem in the reasoning,please do ot change the predicted answer.
+
+8.If you find out a clear and evident example that can argue against S1,you should say that S1 is false.
+
+9.If the verdict is False,be cautious about changing.Only if there is a serious problem you should change it to uncertain.
+
+-----
+
+## Verification Process
+
+### Input Analysis
+**Original Execution:**  
+[[EXECUTION]]
+
+### Verification Steps
+1. **Identify the Goal**: Determine what the original execution is trying to prove
+2. **Evaluate the Premises**: List all given premises and their FOL representations
+3. **Logical Deduction Analysis**: 
+   - Analyze S1's reasoning chain
+   - Analyze  ¬S1's reasoning chain
+   - Check for logical validity and soundness
+4. **Verdict Justification**: Determine which reasoning is correct
+5. **Classification**: Identify the type of case
+6. **Final Conclusion**: Provide the verified answer
+
+-----
+
+## Output Format
+
+Please indicate the revised answer at the end using the following format:
+
+```json
+{{
+  "verdict": "True" | "False" | "Uncertain",
+  "reason": "Type 1: S1 reasoning correct → Return S1's verdict"| 
+            "Type 2: S1 incorrect,  ¬S1 correct with Uncertain verdict → Return Uncertain"| 
+            "Type 3: S1 correct with Uncertain verdict → Return Uncertain" | 
+            "Type 4: S1 incorrect, ¬S1 correct with True verdict → Return False" | 
+            "Type 5: S1 incorrect, ¬S1 correct with False verdict → Return True" | 
+            "Type 6: Both S1 and  ¬S1 incorrect → Return independently verified result (True/False/Uncertain)"
+}}
+```
+
+-----
+
+## Important Notes
+
+- Pay attention to facts that might seem invalid but are actually inferred from previous steps
+- Check whether every fact used in the process is from the context or properly inferred
+- Pay attention to the order of variables in predicates and rules - the order defines the direction of relationships
+- If the original answer is correct, ensure your final answer aligns with it
+- Your final answer should be about the context conclusion, not a judgment about the original answer's quality
+
+-----
+
+### Below is the one you need to verify:
+
+**Original Execution:**  
+[[EXECUTION]]
+
+-----
+
+### Verify:  
+Please indicate the revised answer at the end using curly brackets. The answer must be one of:
+
+```json
+{{
+  "verdict": "True" | "False" | "Uncertain",
+  "reason": "Type 1: S1 reasoning correct → Return S1's verdict"| 
+            "Type 2: S1 incorrect,  ¬S1 correct with Uncertain verdict → Return Uncertain"| 
+            "Type 3: S1 correct with Uncertain verdict → Return Uncertain" | 
+            "Type 4: S1 incorrect, ¬S1 correct with True verdict → Return False" | 
+            "Type 5: S1 incorrect, ¬S1 correct with False verdict → Return True" | 
+            "Type 6: Both S1 and  ¬S1 incorrect → Return independently verified result (True/False/Uncertain)"
+}}
+```
+
+Please carefully read and understand the following requirements before verification:
+- Please pay attention to the facts that you think might be invalid. It is likely that the "invalid" fact is inferred from previous steps and it is actually valid.
+- Please note that the fact it used in the process might not be a valid fact. You need to check whether the fact it used in every step is from the context or inferred from previous step. If not, the fact is invalid and cannot be used.
+- Please Pay Attention to the Order of Variables in Predicates and Rules: In first-order logic, the order in which variables appear in predicates and rules is significant. It defines the direction or nature of the relationship between the entities represented by the variables. Ensure that the interpretation of predicates and the application of rules strictly adhere to the order in which the variables are presented. Misinterpreting the order can lead to incorrect logical deductions. Be careful when verifying the order of predicates in the rules.
+
+-----
+
+**Verify**: If the original answer is correct, please make sure that your final answer stick with the original answer. Make sure that your final answer is the answer about the context, not a judgement about the original answer!!
+If it is difficult to solve,then output uncertain.

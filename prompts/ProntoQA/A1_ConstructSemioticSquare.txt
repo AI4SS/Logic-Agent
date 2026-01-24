@@ -1,0 +1,125 @@
+You are a reasoning expert skilled in formal logic and semiotic analysis.
+
+Your task is to analyse an **entity-property proposition** from ProntoQA using the **Greimas Semiotic Square**, which decomposes a predicate into four logically related positions.
+
+------
+Step 1 – Identify concepts
+
+- **concept_A**: the property predicate being evaluated in the **question** (e.g. `sour`, `bright`, `metallic`)  
+- **concept_B**: its **semantic contrary** if mentioned in the context (e.g. `sweet` vs `sour`)  
+  - If no clear contrary appears in the context, use a **logical negation**: `not A` (e.g. `not sour`)
+
+⚠️ IMPORTANT:  
+- S1 must be **identical in wording and logical form** to the **original question statement**.  
+- Your task will later evaluate whether S1 is True or False → it must match exactly.
+
+------
+Step 2 – Construct the four positions
+
+- **S1**: X is A (must match the original question) → FOL: A(X)  
+- **S2**: X is B (semantic contrary of A) → FOL: B(X)  
+- **¬S1**: X is not A → FOL: ¬A(X)  
+- **¬S2**: X is not B → FOL: ¬B(X)
+
+------
+Required Semantic Conditions:
+
+- S1 ⊥ S2   (contrary: semantically opposite, not merely contradictory)  
+- S1 ⇒ ¬S2  and S2 ⇒ ¬S1  
+- ¬S1 ∪ ¬S2 = complete semantic space
+
+------
+Now perform the task below:
+
+Context:  
+{context}
+
+Question:  
+{question}
+
+------
+Return your output strictly in the JSON format below (no extra text):
+
+```json
+{{
+  "concept_A": "...",
+  "concept_B": "...",
+  "S1": {
+    "statement": "...",
+    "FOL": "..."
+  },
+  "S2": {
+    "statement": "...",
+    "FOL": "..."
+  },
+  "not_S1": {
+    "statement": "...",
+    "FOL": "..."
+  },
+  "not_S2": {
+    "statement": "...",
+    "FOL": "..."
+  }
+}}
+```
+
+------
+
+Below is an example:
+
+Context:  
+Stella is a yumpus. Yumpuses are zumpuses. Zumpuses are impuses. Impuses are dumpuses. Dumpuses are vumpuses. Vumpuses are bright.
+
+Question:  
+Is the following statement true or false? Stella is bright.
+
+Semiotic Square:
+
+concept_A: bright  
+concept_B: dim
+
+S1:  
+statement: Stella is bright.  
+FOL: Bright(Stella)
+
+S2:  
+statement: Stella is dim.  
+FOL: Dim(Stella)
+
+not_S1:  
+statement: Stella is not bright.  
+FOL: ¬Bright(Stella)
+
+not_S2:  
+statement: Stella is not dim.  
+FOL: ¬Dim(Stella)
+------
+Below is an example:
+
+Context:  
+Max is a yumpus. Yumpuses are dumpuses. Dumpuses are wumpuses. Wumpuses are impuses. Impuses are tumpuses. Tumpuses are not sour.
+
+Question:  
+Is the following statement true or false? Max is sour.
+
+Semiotic Square:
+
+concept_A: sour  
+concept_B: sweet
+
+S1:  
+statement: Max is sour.  
+FOL: Sour(Max)
+
+S2:  
+statement: Max is sweet.  
+FOL: Sweet(Max)
+
+not_S1:  
+statement: Max is not sour.  
+FOL: ¬Sour(Max)
+
+not_S2:  
+statement: Max is not sweet.  
+FOL: ¬Sweet(Max)
+

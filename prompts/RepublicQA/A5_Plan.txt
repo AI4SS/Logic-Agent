@@ -1,0 +1,161 @@
+You are a formal reasoning expert.
+
+Your task is to draft a **step-by-step reasoning plan** to determine whether a given logical statement is **true**, **false**, or **uncertain**.  
+------
+The definition of the three options are:
+True: If the premises can infer the question statement under first-order-logic inference rule
+False: If the premises can infer the negation of the question statement under the first-order-logic inference rule
+uncertain: If the premises cannot infer whether the question statement is true or false.
+------
+⚠️ Important Rules:
+- You must only output a **detailed reasoning plan**.
+- Do **NOT** provide the final judgment (True/False/Uncertain) or any direct answer.
+- The plan will later guide another system to perform reasoning and judgment.
+------
+💡 What you can use:
+- Given premises written in natural language and/or first-order logic (FOL).
+- First-order logic inference rules, including but not limited to:
+  Modus Ponens, Modus Tollens, Generalization, Specialization, Conjunction, Elimination, Transitivity, Proof by Division Into Cases, Contradiction Rule.
+------
+🔧 What to do:
+1. Identify the **goal** (the statement to evaluate).
+2. Identify which **premises, rules, or definitions** are relevant.
+3. Break down how to **logically connect premises** to reach intermediate inferences.
+4. Organize the reasoning steps clearly and sequentially.
+5. End with a **final step:determine whether the statement in the goal is true or false or uncertain**, without making the judgment.
+------
+Below is an example
+Question:
+"Repaying one's debts is always just.", 
+"∀x (Debt(x) ∧ Repaid(x) → Just(x))"  
+
+**Premises:**  
+{{
+      "statement": "Justice involves doing good to friends.",
+      "FOL": "∀a (Just(a) → ∀y (Friend(y) → Beneficial(a,y)))"
+    }},
+    {{
+      "statement": "Justice involves avoiding harm to innocent people.",
+      "FOL": "∀a (Just(a) → ∀y (Innocent(y) → ¬Harmful(a,y)))"
+    }},
+    {{
+      "statement": "Debt repayment is generally considered a moral obligation.",
+      "FOL": "∀x (Debt(x) → Obligation(x))"
+    }},
+    {{
+      "statement": "Actions that enable harm to innocent people are not just.",
+      "FOL": "∀a (∃y (Innocent(y) ∧ EnablesHarm(a,y)) → ¬Just(a))"
+    }},
+    {{
+      "statement": "Fulfilling obligations is seen as a sign of integrity.",
+      "FOL": "∀a∀x (Obligation(x) ∧ Fulfill(a,x) → SignOfIntegrity(a))"
+    }},
+    {{
+      "statement": "Some debts originate from fraudulent or unjust means.",
+      "FOL": "∃x (Debt(x) ∧ (Fraudulent(x) ∨ Unjust(x)))"
+    }},
+    {{
+      "statement": "Repaying certain debts could enable harmful activities against innocent people.",
+      "FOL": "∃a∃x (Repay(a,x) ∧ Debt(x) ∧ ∃y (Innocent(y) ∧ EnablesHarm(a,y)))"
+    }} 
+}}
+
+{{
+  "plan": [
+    "Step 1: Identify the goal\nGoal (natural language): Determine if 'Repaying one's debts is always just.'\nGoal (FOL): ∀x (Debt(x) ∧ Repaid(x) → Just(x))" is true or false or uncertain,
+    "Step 2: Extract key premises\n- All debts are obligations: ∀x (Debt(x) → Obligation(x))\n- Fulfilling obligations shows integrity: ∀a∀x (Obligation(x) ∧ Fulfill(a,x) → SignOfIntegrity(a))\n- Just actions do good to friends: ∀a (Just(a) → ∀y (Friend(y) → Beneficial(a,y)))\n- Just actions avoid harm to innocents: ∀a (Just(a) → ∀y (Innocent(y) → ¬Harmful(a,y)))\n- Actions enabling harm are unjust: ∀a (∃y (Innocent(y) ∧ EnablesHarm(a,y)) → ¬Just(a))\n- Some debts are fraudulent/unjust: ∃x (Debt(x) ∧ (Fraudulent(x) ∨ Unjust(x)))\n- Some repayments enable harm: ∃a∃x (Repay(a,x) ∧ Debt(x) ∧ ∃y (Innocent(y) ∧ EnablesHarm(a,y)))",
+    "Step 3: Check positive side\nLook for cases where repayment fulfills obligations, shows integrity, benefits friends, and avoids harm to innocents.",
+    "Step 4: Check negative side\nLook for cases where repayment enables harm or is tied to fraudulent or unjust debts, making the repayment unjust.",
+    "Step 5: Apply logical rules\nUse Modus Ponens, Transitivity, Conjunction, and Contradiction to connect repayment, obligation, harm, and justice.",
+    "Step 6: Search for counterexamples\nCheck if there exist any x or a (∃x, ∃a) where repayment leads to injustice, which would invalidate the universal statement.",
+    "Final Step: Decide whether the premises allow concluding the statement is true, false, or uncertain, but do not give the answer here."
+  ]
+}}
+------
+Below is another example
+Question:
+"Justice is always the interest of the stronger.",
+"∀x (Justice(x) → InterestOfStronger(x))"
+Premises:
+{{
+      "statement": "Justice is the expression of laws.",
+      "FOL": "∀x (Justice(x) ↔ ExpressionOfLaw(x))"
+    }},
+    {{
+      "statement": "If laws hurt the ruler, then justice is not the interest of the ruler.",
+      "FOL": "∀x (Law(x) ∧ Hurts(x, y) ∧ Ruler(y) → ¬InterestOf(Justice, y))"
+    }},
+    {{
+      "statement": "In society, rulers are the stronger people.",
+      "FOL": "∀y (Ruler(y) → Stronger(y))"
+    }},
+    {{
+      "statement": "In each state, the government is the ruling power.",
+      "FOL": "∀x (State(x) → ∃y (Government(y, x) ∧ RulingPower(y, x)))"
+    }},
+    {{
+      "statement": "The government is considered stronger than the people.",
+      "FOL": "∀y (Government(y) → StrongerThan(y, People))"
+    }},
+    {{
+      "statement": "Rulers create laws that reflect their authority.",
+      "FOL": "∀y∀x (Ruler(y) ∧ Law(x) → Creates(y, x) ∧ ReflectsAuthority(x, y))"
+    }},
+    {{
+      "statement": "Laws define justice for citizens.",
+      "FOL": "∀x (Law(x) → DefinesJustice(x, Citizens))"
+    }},
+    {{
+      "statement": "Obedience to laws is described as justice.",
+      "FOL": "∀a∀x (Obey(a, x) ∧ Law(x) → Just(a))"
+    }},
+    {{
+      "statement": "In democratic society, laws sometimes accidentally hurt the rulers.",
+      "FOL": "∃x (Law(x) ∧ DemocraticSociety() → ∃y (Ruler(y) ∧ Hurts(x, y)))"
+    }},
+    {{
+      "statement": "In democratic governments, laws often serve the interests of the majority, not the rulers.",
+      "FOL": "∀x (Law(x) ∧ DemocraticGovernment() → ServesInterest(x, Majority) ∧ ¬ServesInterest(x, Rulers))"
+    }}
+}}
+
+{{
+  "plan": [
+    "Step 1: Identify the goal\nGoal (natural language): Determine if 'Justice is always the interest of the stronger.'\nGoal (FOL): ∀x (Justice(x) → InterestOfStronger(x))",
+    "Step 2: Extract key premises\n- Justice is the expression of laws: ∀x (Justice(x) ↔ ExpressionOfLaw(x))\n- If laws hurt rulers, justice is not in their interest: ∀x (Law(x) ∧ Hurts(x, y) ∧ Ruler(y) → ¬InterestOf(Justice, y))\n- Rulers are the stronger people: ∀y (Ruler(y) → Stronger(y))\n- In democratic society, laws sometimes hurt rulers: ∃x (Law(x) ∧ DemocraticSociety() → ∃y (Ruler(y) ∧ Hurts(x, y)))\n- In democratic governments, laws serve majority interests, not rulers: ∀x (Law(x) ∧ DemocraticGovernment() → ServesInterest(x, Majority) ∧ ¬ServesInterest(x, Rulers))",
+    "Step 3: Connect justice and stronger people\nAnalyze the relationship between justice, laws, rulers, and stronger people using the premises.",
+    "Step 4: Examine potential counterexamples\nLook for cases where justice might not serve the interests of the stronger (rulers), particularly in democratic contexts.",
+    "Step 5: Apply logical rules\nUse substitution, modus ponens, and transitivity to establish whether justice always serves stronger interests.",
+    "Step 6: Analyze the democratic society case\nExamine the implications of laws that hurt rulers in democratic societies, and determine if this constitutes a counterexample.",
+    "Step 7: Connect the concepts of 'interest of' and 'hurts'\nDetermine the logical relationship between something hurting someone and not being in their interest.",
+    "Final Step: Determine whether the statement 'Justice is always the interest of the stronger' is true, false, or uncertain based on the deduction steps."
+  ]
+}}
+------
+Below are the premises and questions you need to derive a plan to solve, please follow the instruction and example aforementioned.
+### Input:
+
+**Question**  
+{target_statement}
+
+**Premises:**  
+{premises}
+
+-----
+
+### Output Format:  
+Only output the plan using the following JSON format:
+
+```json
+{{
+  "plan": [
+    "Step 1: ...",
+    "Step 2: ...",
+    "...",
+    "Final Step: Determine whether the conclusion is true, false, or uncertain based on the deduction steps."
+  ]
+}}
+```
+
+Plan: Make sure you only derive the plan. Do not solve the question and do not determine the truth value of the conclusion at the planning stage. This plan will be used to help guiding a language model to follow step-by-step. The expected final step in the plan is to determine whether the the conclusion is true/false/uncertain.
+⚠️ Do not solve the question and do not determine the truth value at this stage. Only generate a detailed reasoning plan.

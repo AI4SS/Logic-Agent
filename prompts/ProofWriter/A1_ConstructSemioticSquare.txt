@@ -1,0 +1,131 @@
+You are a symbolic reasoning expert skilled in formal logic and semiotic analysis.
+
+Your task is to analyze a **complex logical proposition** from the FOLIO dataset using the **Greimas Semiotic Square**. This framework decomposes a proposition into four logically interrelated positions: the original statement (S1), its semantic contrary (S2), and their respective logical negations (¬S1, ¬S2).
+
+------
+Step 1 – Identify the core proposition
+
+- **S1** must be **identical in wording and logic** to the original question statement.
+- **S2** should be a **semantic contrary** to S1 — i.e., a proposition that **cannot be true at the same time** as S1, but **can be false simultaneously**.
+- If no meaningful contrary can be found, use the **logical negation** of S1 as S2 (i.e., contradiction), and label `"S2_type": "contradictory"`.
+- Use existing entities and predicates from the context — do **not** invent new ones.
+- ¬S1 and ¬S2 are strict logical negations of S1 and S2 respectively.
+
+------
+Step 2 – Build the Semiotic Square
+
+Define the four positions as follows:
+
+- **S1**: Original target proposition → FOL: (as close to formal logic as possible)
+- **S2**: Semantic contrary to S1 (or contradiction if contrary is not available)
+- **¬S1**: Logical negation of S1
+- **¬S2**: Logical negation of S2
+
+Also return `"S2_type"` to specify the type of opposition:
+- `"contrary"` if S2 is semantically opposed to S1
+- `"contradictory"` if S2 is simply the negation of S1
+
+------
+Required Semantic Relationships:
+
+- S1 ⊥ S2   S1 and S2 are **semantic contraries**, not mere negations (if available)
+- S1 ⇒ ¬S2  and S2 ⇒ ¬S1
+- ¬S1 ∪ ¬S2  covers the full semantic space
+---
+Below is an example:
+
+Context:  
+Anne is furry. Anne is nice. Anne is smart. Bob is young. Erin is nice. Harry is smart. Harry is young. Young things are furry. Nice, furry things are green. All green things are nice. Nice, green things are big. All green things are smart. If something is big and young then it is round. All green things are big. If Harry is young then Harry is furry. Furry, smart things are nice.
+
+Question:  
+Based on the above information, is the following statement true, false, or unknown? Harry is not green.
+
+Semiotic Square:  
+{{
+  "S1": {{
+    "statement": "Harry is not green.",
+    "FOL": "Green(Harry, False)"
+  }},
+  "S2": {{
+    "statement": "Harry is green. ",
+    "FOL": "Green(Harry, True)"
+  }},
+  "not_S1": {{
+    "statement": "Harry is green.",
+    "FOL": "Green(Harry, True)"
+  }},
+  "not_S2": {{
+    "statement": "Harry is not green.",
+    "FOL": "Green(Harry, False)"
+  }},
+  "S2_type": "contradictory"
+}}
+
+---
+
+Below is an example:
+
+Context:  
+Bob is cold. Bob is quiet. Bob is red. Bob is smart. Charlie is kind. Charlie is quiet. Charlie is red. Charlie is rough. Dave is cold. Dave is kind. Dave is smart. Fiona is quiet. If something is quiet and cold then it is smart. Red, cold things are round. If something is kind and rough then it is red. All quiet things are rough. Cold, smart things are red. If something is rough then it is cold. All red things are rough. If Dave is smart and Dave is kind then Dave is quiet.
+
+Question:  
+Based on the above information, is the following statement true, false, or unknown? Charlie is kind.
+
+Semiotic Square：
+{{
+  "S1": {{
+    "statement": "Charlie is kind",
+    "FOL": "Kind(Charlie, True)"
+  }},
+  "S2": {{
+    "statement": "Charlie is not kind.",
+    "FOL": "Kind(Charlie, False)"
+  }},
+  "not_S1": {{
+    "statement": "Charlie is not kind.",
+    "FOL": "Kind(Charlie, False)"
+  }},
+  "not_S2": {{
+    "statement": "Charlie is kind",
+    "FOL": "Kind(Charlie, True)"
+  }},
+  "S2_type": "contradictory"
+}}
+
+------
+## Input Format:
+
+Context:  
+{context}
+
+Question:  
+{question}
+
+------
+Return your answer strictly in the format below.  
+⚠️ Do **not** return anything outside this block — no markdown, no LaTeX, no extra commentary.
+
+## Output Format:
+```json
+{{
+  "S1": {{
+    "statement": "...",
+    "FOL": "..."
+  }},
+  "S2": {{
+    "statement": "...",
+    "FOL": "..."
+  }},
+  "not_S1": {{
+    "statement": "...",
+    "FOL": "..."
+  }},
+  "not_S2": {{
+    "statement": "...",
+    "FOL": "..."
+  }},
+  "S2_type": "contrary" | "contradictory"
+}}
+```
+
+

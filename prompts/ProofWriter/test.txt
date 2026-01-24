@@ -1,0 +1,1072 @@
+TRUE
+---
+# Example 3：
+
+Premises:
+1. ∃x (BasketballPlayer(x) ∧ ¬American(x))  
+2. ∀x (BasketballPlayer(x) → Tall(x))  
+3. ∀x (Tall(x) → WearsLargeShoes(x))  
+4. ∀x (WearsLargeShoes(x) → WearsLargeClothes(x))  
+5. ¬WearsLargeClothes(Yuri)
+
+Target Statement:
+Yuri is not an American basketball player.  
+FOL: ¬(American(Yuri) ∧ BasketballPlayer(Yuri))
+
+Reasoning:
+{{
+  "verdict": "True",
+  "explanation": [
+    "Assume for contradiction: Yuri is an American basketball player",
+    "→ BasketballPlayer(Yuri) and American(Yuri)",
+    "From (2): BasketballPlayer(Yuri) → Tall(Yuri) → So Tall(Yuri)",
+    "From (3): Tall(Yuri) → WearsLargeShoes(Yuri) → So WearsLargeShoes(Yuri)",
+    "From (4): WearsLargeShoes(Yuri) → WearsLargeClothes(Yuri) → So WearsLargeClothes(Yuri)",
+    "But (5): ¬WearsLargeClothes(Yuri) → Contradiction",
+    "Therefore: Yuri cannot be a basketball player (regardless of nationality)",
+    "→ Hence, Yuri is not an American basketball player",
+    "Therefore, the statement is True."
+  ]
+}}
+
+---
+### Example 4：
+
+Premises:
+1. ∀x (PerformsInTalentShowsOften(x) → EngagedInSchoolEvents(x) ∧ AttendsSchool(x))
+2. ∀x (¬PerformsInTalentShowsOften(x) → InactiveDisinterested(x))   // from the disjunction
+3. ∀x (ChaperonesDances(x) → ¬Student(x))
+4. ∀x (InactiveDisinterested(x) → ChaperonesDances(x))
+5. ∀x ((YoungChild(x) ∨ Teenager(x)) ∧ WantsAcademicCareer(x) → Student(x))
+6. Bonnie either:
+   (a) EngagedInSchoolEvents(Bonnie) ∧ AttendsSchool(Bonnie) ∧ Student(Bonnie),  
+   or  
+   (b) ¬EngagedInSchoolEvents(Bonnie) ∧ ¬AttendsSchool(Bonnie) ∧ ¬Student(Bonnie)
+
+Target Statement:
+If Bonnie is either both a young child or teenager who wishes to further her academic career and chaperones high school dances,  
+or neither is a young child nor teenager who wishes to further her academic career,  
+then Bonnie is either a student who attends the school or an inactive and disinterested member of the community.
+
+FOL (rephrased logically):  
+If [(YoungOrTeen(Bonnie) ∧ WantsAcademicCareer(Bonnie) ∧ ChaperonesDances(Bonnie)) ∨  
+     (¬YoungOrTeen(Bonnie) ∧ ¬WantsAcademicCareer(Bonnie))],  
+then [Student(Bonnie) ∨ InactiveDisinterested(Bonnie)]
+
+Reasoning:
+{{
+  "verdict": "True",
+  "explanation": [
+    "Case 1: Bonnie is a young child or teenager AND wants an academic career AND chaperones dances",
+    "→ From (5): Young/Teen + WantsAcademicCareer → Student(Bonnie)",
+    "→ But (3): ChaperonesDances → ¬Student(Bonnie)",
+    "→ Contradiction: So this case cannot occur — antecedent leads to inconsistency ⇒ implication holds vacuously",
+    "Case 2: Bonnie is not a young child or teenager who wants an academic career",
+    "→ Then (5) does not apply",
+    "→ We don't know if she's a student, but could be InactiveDisinterested",
+    "From (6): Bonnie is either (attending+engaged+student) or (none of those)",
+    "→ In the second case: not student ⇒ possibly InactiveDisinterested",
+    "→ Then from (4): ChaperonesDances",
+    "Therefore, in both branches, the conclusion (Bonnie is student OR inactive/disinterested) holds",
+    "Therefore, the statement is True."
+  ]
+}}
+
+FALSE/
+---
+
+### Example 3: 
+
+Premises:
+1. Striker(RobertLewandowski)
+2. ∀x (Striker(x) → SoccerPlayer(x))   // [BG]
+3. LeftTeam(RobertLewandowski, BayernMunchen)
+4. ∀x ∀y (LeftTeam(x, y) → ¬PlaysFor(x, y))   // [BG]
+
+Target Statement:
+Robert Lewandowski plays for Bayern Munchen.  
+FOL: PlaysFor(RobertLewandowski, BayernMunchen)
+
+Reasoning:
+{{
+  "verdict": "False",
+  "explanation": [
+    "From (3): RobertLewandowski left BayernMunchen ⇒ LeftTeam(RobertLewandowski, BayernMunchen)",
+    "From (4): ∀x ∀y (LeftTeam(x, y) → ¬PlaysFor(x, y))",
+    "→ Instantiate with RobertLewandowski and BayernMunchen:",
+    "LeftTeam(RobertLewandowski, BayernMunchen) → ¬PlaysFor(RobertLewandowski, BayernMunchen)",
+    "→ So we derive: ¬PlaysFor(RobertLewandowski, BayernMunchen)",
+    "The target statement is: PlaysFor(RobertLewandowski, BayernMunchen)",
+    "→ Contradicts the conclusion just derived",
+    "Therefore, the statement is False."
+  ]
+}}
+
+---
+
+### Example 4: 
+
+Premises:
+1. ∀x (WorksStudentJob(x) → NeedsMoney(x))
+2. ∀x (OrdersTakeout(x) → WorksStudentJob(x))
+3. ∀x (OrdersTakeout(x) ∨ EnjoysDiningHall(x))
+4. ∀x (EnjoysDiningHall(x) → ¬Picky(x))
+5. ∀x (EnjoysDiningHall(x) → SpendsTimeWithFriends(x))
+6. (WorksStudentJob(Mary) ∧ NeedsMoney(Mary)) → (¬Picky(Mary) ∧ ¬NeedsMoney(Mary))
+
+Target Statement:  
+¬Picky(Mary) ∨ (Picky(Mary) → SpendsTimeWithFriends(Mary))
+
+
+### Reasoning:
+{{
+  "verdict": "False",
+  "explanation": [
+    "Assume: WorksStudentJob(Mary)",
+    "→ By (1): NeedsMoney(Mary)",
+    "→ Then antecedent of (6) is true → must have: ¬Picky(Mary) ∧ ¬NeedsMoney(Mary)",
+    "→ Contradiction: NeedsMoney(Mary) ∧ ¬NeedsMoney(Mary)",
+    "→ So: Mary cannot work a student job",
+    "Then: OrdersTakeout(Mary) must be false (otherwise by (2) she would work)",
+    "→ From (3): EnjoysDiningHall(Mary) must be true",
+    "→ By (4): ¬Picky(Mary)",
+    "Now evaluate target:",
+    "¬Picky(Mary) ∨ (Picky(Mary) → SpendsTimeWithFriends(Mary))",
+    "→ Left side ¬Picky(Mary) is true → statement should be true",
+    "But: contradiction in (6) suggests no consistent assignment possible",
+    "→ Picky(Mary) and ¬Picky(Mary) both lead to failure in truth assignment",
+    "Therefore, the statement is False."
+  ]
+}}
+
+---
+
+
+
+
+## Example 1: True (Refuted by contradiction)
+
+### Premises:
+1. ∃x (BasketballPlayer(x) ∧ ¬American(x))  
+2. ∀x (BasketballPlayer(x) → Tall(x))  
+3. ∀x (Tall(x) → WearsLargeShoes(x))  
+4. ∀x (WearsLargeShoes(x) → WearsLargeClothes(x))  
+5. ¬WearsLargeClothes(Yuri)
+
+### Target Statement:
+Yuri is not an American basketball player.  
+FOL: ¬(American(Yuri) ∧ BasketballPlayer(Yuri))
+
+### Reasoning:
+- Assume for contradiction: Yuri **is** an American basketball player  
+  ⇒ BasketballPlayer(Yuri) ∧ American(Yuri)  
+- From (2): BasketballPlayer ⇒ Tall ⇒ Tall(Yuri)  
+- From (3): Tall ⇒ WearsLargeShoes ⇒ WearsLargeShoes(Yuri)  
+- From (4): WearsLargeShoes ⇒ WearsLargeClothes ⇒ WearsLargeClothes(Yuri)  
+- But (5): ¬WearsLargeClothes(Yuri)  
+- ⇒ Contradiction  
+- Therefore, assumption is false ⇒ Yuri cannot be an American basketball player  
+- The statement is **True**
+
+
+---
+
+## Example 2: True (Implication holds vacuously or via consistent branch)
+
+### Premises:
+1. ∀x (PerformsInTalentShowsOften(x) → EngagedInSchoolEvents(x) ∧ AttendsSchool(x))  
+2. ∀x (¬PerformsInTalentShowsOften(x) → InactiveDisinterested(x))  
+3. ∀x (ChaperonesDances(x) → ¬Student(x))  
+4. ∀x (InactiveDisinterested(x) → ChaperonesDances(x))  
+5. ∀x ((YoungChild(x) ∨ Teenager(x)) ∧ WantsAcademicCareer(x) → Student(x))  
+6. Bonnie either:
+   (a) Engaged ∧ Attends ∧ Student  
+   or  
+   (b) ¬Engaged ∧ ¬Attends ∧ ¬Student
+
+### Target Statement:
+If Bonnie is either (i) a young child or teenager who wants to further academic career and chaperones dances  
+or (ii) not a young child nor teenager who wants to further academic career,  
+then she is either a student or inactive and disinterested.
+
+FOL:  
+((YoungOrTeen ∧ WantsAcademic ∧ Chaperones) ∨ (¬YoungOrTeen ∧ ¬WantsAcademic))  
+→ (Student ∨ InactiveDisinterested)
+
+### Reasoning:
+- **Case 1**: Bonnie is young/teen + wants academics + chaperones  
+  - From (5): ⇒ Student(Bonnie)  
+  - From (3): Chaperones ⇒ ¬Student  
+  - ⇒ Contradiction ⇒ This case cannot hold ⇒ implication vacuously true
+- **Case 2**: Bonnie is not young/teen + does not want academics  
+  - (5) does not apply → student status unknown  
+  - From (6): Bonnie is either Student or ¬Student  
+  - If ¬Student → from (2) and (4): InactiveDisinterested → conclusion satisfied  
+  - If Student → conclusion satisfied  
+- In **both cases**, conclusion (Student ∨ InactiveDisinterested) holds  
+- The statement is **True**
+
+---
+
+## Example 3: True (Implication holds in both disjunctive branches)
+
+### Premises:
+1. ∀x (SchedulesMeeting(x) → AppearsCompanyToday(x))  
+2. ∀x (HasLunchAtCompany(x) → SchedulesMeeting(x))  
+3. ∀x (HasLunchAtCompany(x) ∨ HasLunchAtHome(x))  
+4. ∀x (HasLunchAtHome(x) → WorksRemotely(x))  
+5. ∀x (InOtherCountries(x) → WorksRemotely(x))  
+6. ∀x (Manager(x) → ¬WorksRemotely(x))  
+7. James is either:  
+   (a) Manager ∧ AppearsCompanyToday  
+   or  
+   (b) ¬Manager ∧ ¬AppearsCompanyToday
+
+### Target Statement:
+If James is either a manager or in other countries,  
+then James either (i) has lunch at home and works remotely,  
+or (ii) does neither of those things.
+
+FOL:  
+(Manager(James) ∨ InOtherCountries(James))  
+→  
+[(HasLunchAtHome(James) ∧ WorksRemotely(James))  
+∨ (¬HasLunchAtHome(James) ∧ ¬WorksRemotely(James))]
+
+### Reasoning:
+- **Case 1**: Manager(James)  
+  - From (6): ⇒ ¬WorksRemotely  
+  - From (3): James has lunch either at home or company  
+  - If HasLunchAtCompany → ⇒ ¬HasLunchAtHome  
+  - So ¬HasLunchAtHome ∧ ¬WorksRemotely holds ⇒ RHS satisfied
+- **Case 2**: InOtherCountries(James)  
+  - From (5): ⇒ WorksRemotely  
+  - Then for RHS to hold, we need either:  
+    - (HasLunchAtHome ∧ WorksRemotely) ⇒ OK  
+    - (¬HasLunchAtHome ∧ ¬WorksRemotely) ⇒ fails because WorksRemotely true  
+  - From (4): LunchHome ⇒ WorksRemotely ⇒ If Remote true, LunchHome may be true  
+  - So we can pick HasLunchAtHome = true ⇒ (LunchHome ∧ Remote) holds  
+- In both cases, RHS of implication holds  
+- The statement is **True**
+
+
+
+## Example 1: False (Direct contradiction)
+
+### Premises:
+1. Striker(RobertLewandowski)  
+2. ∀x (Striker(x) → SoccerPlayer(x))  
+3. LeftTeam(RobertLewandowski, BayernMunchen)  
+4. ∀x ∀y (LeftTeam(x, y) → ¬PlaysFor(x, y))
+
+### Target Statement:
+PlaysFor(RobertLewandowski, BayernMunchen)
+
+### Reasoning:
+- From (3): RobertLewandowski left BayernMunchen  
+- From (4): Leaving a team ⇒ no longer plays for it  
+- So: ¬PlaysFor(RobertLewandowski, BayernMunchen)  
+- Contradicts the target statement  
+- The statement is **False**
+
+---
+
+## Example 2: False (Contradiction from assumed antecedents)
+
+### Premises:
+1. ∀x (WorksStudentJob(x) → NeedsMoney(x))  
+2. ∀x (OrdersTakeout(x) → WorksStudentJob(x))  
+3. ∀x (OrdersTakeout(x) ∨ EnjoysDiningHall(x))  
+4. ∀x (EnjoysDiningHall(x) → ¬Picky(x))  
+5. ∀x (EnjoysDiningHall(x) → SpendsTimeWithFriends(x))  
+6. (WorksStudentJob(Mary) ∧ NeedsMoney(Mary)) → (¬Picky(Mary) ∧ ¬NeedsMoney(Mary))
+
+### Target Statement:
+¬Picky(Mary) ∨ (Picky(Mary) → SpendsTimeWithFriends(Mary))
+
+### Reasoning:
+- Assume Mary works a student job  
+- From (1): ⇒ NeedsMoney(Mary)  
+- From (6): (Works ∧ Needs) ⇒ (¬Picky ∧ ¬Needs) ⇒ Contradiction  
+- So Mary **cannot** work a student job  
+- ⇒ OrdersTakeout(Mary) is false (from (2))  
+- Then from (3): ⇒ EnjoysDiningHall(Mary)  
+- From (4): ⇒ ¬Picky(Mary)  
+- So target statement is in the form:  
+  ¬Picky ∨ (Picky → …) ⇒ ¬Picky is true ⇒ full statement is true  
+- But (6) leads to contradiction again when assuming (Works ∧ Needs), even indirectly  
+- Conflicting constraints on Mary’s profile ⇒ no consistent assignment  
+- The statement is **False**
+
+---
+
+## Example 3: False (Both branches of antecedent lead to contradiction in conclusion)
+
+### Premises:
+1. ∀x (PerformsInTalentShowsOften(x) → Attends(x) ∧ Engaged(x))  
+2. ∀x (¬PerformsInTalentShowsOften(x) → InactiveDisinterested(x))  
+3. ∀x (ChaperonesDances(x) → ¬Student(x))  
+4. ∀x (InactiveDisinterested(x) → ChaperonesDances(x))  
+5. ∀x ((YoungChild(x) ∨ Teenager(x)) ∧ WantsAcademicCareer(x) → Student(x))  
+6. Bonnie is either:
+   (a) Attends ∧ Engaged ∧ Student  
+   or  
+   (b) ¬Attends ∧ ¬Engaged ∧ ¬Student
+
+### Target Statement:
+If Bonnie either chaperones high school dances, or (if not, she performs in school talent shows),  
+then Bonnie is:  
+(1) (Young child or teenager who wants to further her academic career)  
+and  
+(2) Inactive and disinterested
+
+FOL:  
+(Chaperones(Bonnie) ∨ (¬Chaperones(Bonnie) → Performs(Bonnie)))  
+→ ((YoungChild ∨ Teenager) ∧ WantsAcademicCareer ∧ InactiveDisinterested)
+
+### Reasoning:
+- **Case 1**: ChaperonesDances(Bonnie) is true  
+  - ⇒ From (3): ¬Student(Bonnie)  
+  - From (6): ⇒ Also ¬Attends, ¬Engaged  
+  - From (2): ⇒ Not performing → InactiveDisinterested  
+  - From (5): If she is Young/Teen + WantsAcademics ⇒ Student  
+  - Contradiction: she’s ¬Student and Student ⇒ contradiction  
+  - ⇒ Conclusion is false  
+- **Case 2**: ¬Chaperones ⇒ Performs  
+  - From (1): Performs ⇒ Attends ∧ Engaged  
+  - From (6): If Attends ∧ Engaged ⇒ must be Student  
+  - From (2): Performs ⇒ ¬InactiveDisinterested  
+  - But conclusion requires InactiveDisinterested ⇒ contradiction  
+- In both cases, antecedent true, but conclusion false  
+- The statement is **False**
+
+
+
+
+
+
+
+
+# Example 1：
+
+Premises:
+1. ∃x (BasketballPlayer(x) ∧ ¬American(x))  
+2. ∀x (BasketballPlayer(x) → Tall(x))  
+3. ∀x (Tall(x) → WearsLargeShoes(x))  
+4. ∀x (WearsLargeShoes(x) → WearsLargeClothes(x))  
+5. ¬WearsLargeClothes(Yuri)
+
+Target Statement:
+Yuri is not an American basketball player.  
+FOL: ¬(American(Yuri) ∧ BasketballPlayer(Yuri))
+
+Reasoning:
+{{
+  "verdict": "True",
+  "explanation": [
+    "Assume for contradiction: Yuri is an American basketball player",
+    "→ BasketballPlayer(Yuri) and American(Yuri)",
+    "From (2): BasketballPlayer(Yuri) → Tall(Yuri) → So Tall(Yuri)",
+    "From (3): Tall(Yuri) → WearsLargeShoes(Yuri) → So WearsLargeShoes(Yuri)",
+    "From (4): WearsLargeShoes(Yuri) → WearsLargeClothes(Yuri) → So WearsLargeClothes(Yuri)",
+    "But (5): ¬WearsLargeClothes(Yuri) → Contradiction",
+    "Therefore: Yuri cannot be a basketball player (regardless of nationality)",
+    "→ Hence, Yuri is not an American basketball player",
+    "Therefore, the statement is True."
+  ]
+}}
+
+---
+### Example 2：
+
+Premises:
+1. ∀x (PerformsInTalentShowsOften(x) → EngagedInSchoolEvents(x) ∧ AttendsSchool(x))
+2. ∀x (¬PerformsInTalentShowsOften(x) → InactiveDisinterested(x))   // from the disjunction
+3. ∀x (ChaperonesDances(x) → ¬Student(x))
+4. ∀x (InactiveDisinterested(x) → ChaperonesDances(x))
+5. ∀x ((YoungChild(x) ∨ Teenager(x)) ∧ WantsAcademicCareer(x) → Student(x))
+6. Bonnie either:
+   (a) EngagedInSchoolEvents(Bonnie) ∧ AttendsSchool(Bonnie) ∧ Student(Bonnie),  
+   or  
+   (b) ¬EngagedInSchoolEvents(Bonnie) ∧ ¬AttendsSchool(Bonnie) ∧ ¬Student(Bonnie)
+
+Target Statement:
+If Bonnie is either both a young child or teenager who wishes to further her academic career and chaperones high school dances,  
+or neither is a young child nor teenager who wishes to further her academic career,  
+then Bonnie is either a student who attends the school or an inactive and disinterested member of the community.
+
+FOL (rephrased logically):  
+If [(YoungOrTeen(Bonnie) ∧ WantsAcademicCareer(Bonnie) ∧ ChaperonesDances(Bonnie)) ∨  
+     (¬YoungOrTeen(Bonnie) ∧ ¬WantsAcademicCareer(Bonnie))],  
+then [Student(Bonnie) ∨ InactiveDisinterested(Bonnie)]
+
+Reasoning:
+{{
+  "verdict": "True",
+  "explanation": [
+    "Case 1: Bonnie is a young child or teenager AND wants an academic career AND chaperones dances",
+    "→ From (5): Young/Teen + WantsAcademicCareer → Student(Bonnie)",
+    "→ But (3): ChaperonesDances → ¬Student(Bonnie)",
+    "→ Contradiction: So this case cannot occur — antecedent leads to inconsistency ⇒ implication holds vacuously",
+    "Case 2: Bonnie is not a young child or teenager who wants an academic career",
+    "→ Then (5) does not apply",
+    "→ We don't know if she's a student, but could be InactiveDisinterested",
+    "From (6): Bonnie is either (attending+engaged+student) or (none of those)",
+    "→ In the second case: not student ⇒ possibly InactiveDisinterested",
+    "→ Then from (4): ChaperonesDances",
+    "Therefore, in both branches, the conclusion (Bonnie is student OR inactive/disinterested) holds",
+    "Therefore, the statement is True."
+  ]
+}}
+
+---
+## Example 3:
+
+### Premises:
+1. ∀x (SchedulesMeeting(x) → AppearsCompanyToday(x))  
+2. ∀x (HasLunchAtCompany(x) → SchedulesMeeting(x))  
+3. ∀x (HasLunchAtCompany(x) ∨ HasLunchAtHome(x)) // lunch: either company or home  
+4. ∀x (HasLunchAtHome(x) → WorksRemotely(x))  
+5. ∀x (InOtherCountries(x) → WorksRemotely(x))  
+6. ∀x (Manager(x) → ¬WorksRemotely(x))  
+7. James is either:  
+ (a) Manager ∧ AppearsCompanyToday  
+ or  
+ (b) ¬Manager ∧ ¬AppearsCompanyToday
+
+
+### Target Statement:
+If James is either a manager or in other countries,  
+then James either has lunch at home and works remotely from home,  
+or neither has lunch at home nor works remotely from home.  
+
+FOL:  
+(Manager(James) ∨ InOtherCountries(James)) →  
+( (HasLunchAtHome(James) ∧ WorksRemotely(James)) ∨  
+  (¬HasLunchAtHome(James) ∧ ¬WorksRemotely(James)) )
+
+### Reasoning:
+```json
+{{
+  "verdict": "True",
+  "explanation": [
+    "We evaluate the implication: If (Manager ∨ InOtherCountries), then (LunchHome ∧ Remote) ∨ (¬LunchHome ∧ ¬Remote).",
+    "Split into two cases based on the antecedent disjunction:"
+    ,
+    "Case 1: Manager(James)",
+    "From (6): Manager ⇒ ¬WorksRemotely.",
+    "Now analyze RHS of implication:",
+    "- Since WorksRemotely is false, for (LunchHome ∧ Remote) to be true, both parts must be true — but one is false.",
+    "- So (LunchHome ∧ Remote) is false.",
+    "- But if ¬WorksRemotely holds, then (¬LunchHome ∧ ¬Remote) can hold if LunchHome is also false.",
+    "- From (3), James either has lunch at home or at company.",
+    "- If he has lunch at company, then ¬LunchHome holds.",
+    "- So ¬LunchHome ∧ ¬Remote holds.",
+    "⇒ RHS of implication holds in this case.",
+    ,
+    "Case 2: InOtherCountries(James)",
+    "From (5): InOtherCountries ⇒ WorksRemotely.",
+    "Then for RHS to be true, either:",
+    "- (LunchHome ∧ Remote): if LunchHome true → valid.",
+    "- or (¬LunchHome ∧ ¬Remote): but Remote is true, so this branch fails.",
+    "→ Therefore, RHS must rely on (LunchHome ∧ Remote).",
+    "From (4): LunchHome ⇒ Remote, so if Remote is true, LunchHome may or may not be true.",
+    "But we cannot guarantee ¬LunchHome.",
+    "However, if LunchHome is true, then (LunchHome ∧ Remote) holds ⇒ RHS satisfied.",
+    "→ If LunchHome is false, then ¬LunchHome ∧ Remote is not a valid RHS branch, so implication fails.",
+    "But this is not the case — nothing contradicts LunchHome being true.",
+    "Therefore, RHS can be satisfied in this case too.",
+    ,
+    "In both cases, at least one disjunct in the RHS holds whenever the antecedent is true.",
+    "Therefore, the implication holds universally.",
+    "Therefore, the statement is True."
+  ]
+}}
+
+
+
+
+
+
+
+Below are some examples:
+
+### Example 1: 
+
+Premises:
+1. Striker(RobertLewandowski)
+2. ∀x (Striker(x) → SoccerPlayer(x))   // [BG]
+3. LeftTeam(RobertLewandowski, BayernMunchen)
+4. ∀x ∀y (LeftTeam(x, y) → ¬PlaysFor(x, y))   // [BG]
+
+Target Statement:
+Robert Lewandowski plays for Bayern Munchen.  
+FOL: PlaysFor(RobertLewandowski, BayernMunchen)
+
+Reasoning:
+{{
+  "verdict": "False",
+  "explanation": [
+    "From (3): RobertLewandowski left BayernMunchen ⇒ LeftTeam(RobertLewandowski, BayernMunchen)",
+    "From (4): ∀x ∀y (LeftTeam(x, y) → ¬PlaysFor(x, y))",
+    "→ Instantiate with RobertLewandowski and BayernMunchen:",
+    "LeftTeam(RobertLewandowski, BayernMunchen) → ¬PlaysFor(RobertLewandowski, BayernMunchen)",
+    "→ So we derive: ¬PlaysFor(RobertLewandowski, BayernMunchen)",
+    "The target statement is: PlaysFor(RobertLewandowski, BayernMunchen)",
+    "→ Contradicts the conclusion just derived",
+    "Therefore, the statement is False."
+  ]
+}}
+
+---
+
+### Example 2: 
+
+Premises:
+1. ∀x (WorksStudentJob(x) → NeedsMoney(x))
+2. ∀x (OrdersTakeout(x) → WorksStudentJob(x))
+3. ∀x (OrdersTakeout(x) ∨ EnjoysDiningHall(x))
+4. ∀x (EnjoysDiningHall(x) → ¬Picky(x))
+5. ∀x (EnjoysDiningHall(x) → SpendsTimeWithFriends(x))
+6. (WorksStudentJob(Mary) ∧ NeedsMoney(Mary)) → (¬Picky(Mary) ∧ ¬NeedsMoney(Mary))
+
+Target Statement:  
+¬Picky(Mary) ∨ (Picky(Mary) → SpendsTimeWithFriends(Mary))
+
+
+### Reasoning:
+{{
+  "verdict": "False",
+  "explanation": [
+    "Assume: WorksStudentJob(Mary)",
+    "→ By (1): NeedsMoney(Mary)",
+    "→ Then antecedent of (6) is true → must have: ¬Picky(Mary) ∧ ¬NeedsMoney(Mary)",
+    "→ Contradiction: NeedsMoney(Mary) ∧ ¬NeedsMoney(Mary)",
+    "→ So: Mary cannot work a student job",
+    "Then: OrdersTakeout(Mary) must be false (otherwise by (2) she would work)",
+    "→ From (3): EnjoysDiningHall(Mary) must be true",
+    "→ By (4): ¬Picky(Mary)",
+    "Now evaluate target:",
+    "¬Picky(Mary) ∨ (Picky(Mary) → SpendsTimeWithFriends(Mary))",
+    "→ Left side ¬Picky(Mary) is true → statement should be true",
+    "But: contradiction in (6) suggests no consistent assignment possible",
+    "→ Picky(Mary) and ¬Picky(Mary) both lead to failure in truth assignment",
+    "Therefore, the statement is False."
+  ]
+}}
+
+---
+## Example:  False (Refuted by contradiction in both cases)
+
+### Premises:
+1. ∀x (PerformsInTalentShowsOften(x) → Attends(x) ∧ Engaged(x))
+2. ∀x (¬PerformsInTalentShowsOften(x) → InactiveDisinterested(x))   // exclusive: perform or inactive
+3. ∀x (ChaperonesDances(x) → ¬Student(x))
+4. ∀x (InactiveDisinterested(x) → ChaperonesDances(x))
+5. ∀x ((YoungChild(x) ∨ Teenager(x)) ∧ WantsAcademicCareer(x) → Student(x))
+6. Bonnie is either:
+   (a) Attends(Bonnie) ∧ Engaged(Bonnie) ∧ Student(Bonnie),  
+   or  
+   (b) ¬Attends(Bonnie) ∧ ¬Engaged(Bonnie) ∧ ¬Student(Bonnie)
+
+
+### Target Statement:
+If Bonnie either chaperones high school dances or (if she does not, then she performs in school talent shows often),  
+then Bonnie is both:
+- (Young child or teenager who wants to further academic career), and  
+- Inactive and disinterested.
+
+FOL:  
+(ChaperonesDances(Bonnie) ∨ (¬ChaperonesDances(Bonnie) → Performs(Bonnie)))  
+→ ((YoungChild(Bonnie) ∨ Teenager(Bonnie)) ∧ WantsAcademicCareer(Bonnie) ∧ InactiveDisinterested(Bonnie))
+
+
+### Reasoning:
+```json
+{{
+  "verdict": "False",
+  "explanation": [
+    "We examine the implication: If A then B, where A is a disjunction with a conditional, and B is a three-part conjunction.",
+    "A = ChaperonesDances(Bonnie) ∨ (¬ChaperonesDances(Bonnie) → Performs(Bonnie))",
+    "Assume A holds (antecedent true), and test if B holds in each case.",
+    "",
+    "Case 1: ChaperonesDances(Bonnie) is true.",
+    "→ From premise (3): Chaperones ⇒ ¬Student",
+    "→ From premise (6): if Bonnie is not a student ⇒ she is not attending or engaged either.",
+    "→ So we are in disjunct (b): ¬Attends, ¬Engaged, ¬Student.",
+    "→ From (2): if not performing, then InactiveDisinterested.",
+    "→ From (4): InactiveDisinterested ⇒ Chaperones → consistent.",
+    "Now check if conclusion B holds:",
+    "- It requires InactiveDisinterested(Bonnie) AND being a young child/teenager who wants academic career.",
+    "- But from (5): such individuals ⇒ Student(Bonnie)",
+    "- Contradiction: We already have ¬Student(Bonnie)",
+    "⇒ Cannot be both Student and ¬Student ⇒ contradiction ⇒ B is false.",
+    "",
+    "Case 2: ¬ChaperonesDances(Bonnie) → Performs(Bonnie)",
+    "Suppose ChaperonesDances(Bonnie) is false ⇒ so must Perform(Bonnie) hold.",
+    "→ From (1): Performs ⇒ Attends ∧ Engaged",
+    "→ From (6): then Bonnie must also be Student(Bonnie)",
+    "→ From (2): since she performs ⇒ ¬InactiveDisinterested(Bonnie)",
+    "Conclusion B requires InactiveDisinterested ⇒ contradiction.",
+    "Also requires YoungChild/Teenager + WantsAcademicCareer ⇒ Student ⇒ already true.",
+    "But again, Student + InactiveDisinterested contradicts context.",
+    "",
+    "In both cases, the conclusion fails even when the antecedent holds.",
+    "Therefore, the implication is logically false.",
+    "Therefore, the statement is False."
+  ]
+}}
+
+
+
+You are a **formal reasoning assistant** specialized in **logic-based refutation**.
+
+Your task is to determine whether a **target statement** can be **strictly and deductively refuted** using a given list of **premises**, applying only formal first-order logic.
+
+You must determine whether **assuming the target statement is true** leads to:
+- A **logical contradiction**, or
+- The **valid deduction of its negation**.
+
+This task matches the **refutation paradigm** in the **FOLIO dataset**, where a hypothesis is evaluated for whether it must logically be **False**, or whether it remains **Uncertain** due to insufficient contradiction.
+
+---
+
+## Refutation Decision Criteria
+
+You must choose one of two outcomes:
+
+### Output "False" **only if**:
+One of the following holds **purely through logic**:
+- A direct contradiction is provable (e.g., P ∧ ¬P),
+- A rule allows you to derive the **negation of the target statement**,
+- An assumption of the target being true leads to a **logical inconsistency** when chained with the premises.
+
+> In short: If the truth of the target causes the logic to "break", label it as **False**.
+
+---
+
+### Output "Uncertain" **only if**:
+- The target **cannot be proven false** using available premises,
+- No direct or indirect **negation of the target** can be deduced,
+- Even if the target cannot be proven **true**, that is not sufficient for refutation.
+
+> ⚠️ Absence of proof is **not** refutation.
+> You must identify **contradiction**, not merely "no support".
+
+---
+
+## Permitted Inference Techniques
+
+You may apply any of the following valid reasoning patterns:
+
+### Logical Contradiction / Reductio:
+- Assume the target is true → chain the implications.
+- If the result leads to P ∧ ¬P → contradiction ⇒ **False**.
+
+### Modus Tollens:
+- If P → Q and ¬Q, then deduce ¬P.
+
+### Contrapositive / Negative Rule Chaining:
+- ∀x (A(x) → ¬B(x)) and A(a) ⇒ infer ¬B(a)
+- Combine rules transitively: A → B, B → ¬C ⇒ A → ¬C
+
+### Compound Antecedents:
+- If ∀x (A(x) ∧ B(x) → ¬C(x)), and both A(a) and B(a) are known ⇒ deduce ¬C(a)
+
+### Universal Instantiation:
+- Apply ∀x rules to specific individuals by substituting x → a
+
+---
+
+## Special Considerations for FOLIO:
+
+- Many contradictions in FOLIO arise from **identity conflicts** (e.g., a person cannot be both a student and a chaperone).
+- Watch for **role exclusivity**, such as "only students attend school", or "chaperones cannot be students".
+- Use explicit disjunction cases carefully: just because the target is not *required* doesn't mean it is **refuted**.
+
+---
+
+## Input Format:
+
+### Premises:
+{premises}
+
+### Target Statement:
+{target_statement}
+
+---
+Return your answer strictly in the format below.  
+⚠️ Do **not** return anything outside this block — no markdown, no LaTeX, no extra commentary.
+
+## Output Format:
+
+```json
+{{
+  "verdict": "False" | "Uncertain",
+  "explanation": [
+    "Step-by-step justification...",
+    "...",
+    "Therefore, the statement is (False/Uncertain)."
+  ]
+}}
+```
+------
+Below are some examples:
+
+### Example 1: 
+
+Premises:
+1. Striker(RobertLewandowski)
+2. ∀x (Striker(x) → SoccerPlayer(x))   // [BG]
+3. LeftTeam(RobertLewandowski, BayernMunchen)
+4. ∀x ∀y (LeftTeam(x, y) → ¬PlaysFor(x, y))   // [BG]
+
+Target Statement:
+Robert Lewandowski plays for Bayern Munchen.  
+FOL: PlaysFor(RobertLewandowski, BayernMunchen)
+
+Reasoning:
+{{
+  "verdict": "False",
+  "explanation": [
+    "From (3): RobertLewandowski left BayernMunchen ⇒ LeftTeam(RobertLewandowski, BayernMunchen)",
+    "From (4): ∀x ∀y (LeftTeam(x, y) → ¬PlaysFor(x, y))",
+    "→ Instantiate with RobertLewandowski and BayernMunchen:",
+    "LeftTeam(RobertLewandowski, BayernMunchen) → ¬PlaysFor(RobertLewandowski, BayernMunchen)",
+    "→ So we derive: ¬PlaysFor(RobertLewandowski, BayernMunchen)",
+    "The target statement is: PlaysFor(RobertLewandowski, BayernMunchen)",
+    "→ Contradicts the conclusion just derived",
+    "Therefore, the statement is False."
+  ]
+}}
+
+---
+
+### Example 2: 
+
+Premises:
+1. ∀x (WorksStudentJob(x) → NeedsMoney(x))
+2. ∀x (OrdersTakeout(x) → WorksStudentJob(x))
+3. ∀x (OrdersTakeout(x) ∨ EnjoysDiningHall(x))
+4. ∀x (EnjoysDiningHall(x) → ¬Picky(x))
+5. ∀x (EnjoysDiningHall(x) → SpendsTimeWithFriends(x))
+6. (WorksStudentJob(Mary) ∧ NeedsMoney(Mary)) → (¬Picky(Mary) ∧ ¬NeedsMoney(Mary))
+
+Target Statement:  
+¬Picky(Mary) ∨ (Picky(Mary) → SpendsTimeWithFriends(Mary))
+
+
+### Reasoning:
+{{
+  "verdict": "False",
+  "explanation": [
+    "Assume: WorksStudentJob(Mary)",
+    "→ By (1): NeedsMoney(Mary)",
+    "→ Then antecedent of (6) is true → must have: ¬Picky(Mary) ∧ ¬NeedsMoney(Mary)",
+    "→ Contradiction: NeedsMoney(Mary) ∧ ¬NeedsMoney(Mary)",
+    "→ So: Mary cannot work a student job",
+    "Then: OrdersTakeout(Mary) must be false (otherwise by (2) she would work)",
+    "→ From (3): EnjoysDiningHall(Mary) must be true",
+    "→ By (4): ¬Picky(Mary)",
+    "Now evaluate target:",
+    "¬Picky(Mary) ∨ (Picky(Mary) → SpendsTimeWithFriends(Mary))",
+    "→ Left side ¬Picky(Mary) is true → statement should be true",
+    "But: contradiction in (6) suggests no consistent assignment possible",
+    "→ Picky(Mary) and ¬Picky(Mary) both lead to failure in truth assignment",
+    "Therefore, the statement is False."
+  ]
+}}
+
+---
+## Example: ❌ False (Refuted by contradiction in both cases)
+
+### Premises:
+1. ∀x (PerformsInTalentShowsOften(x) → Attends(x) ∧ Engaged(x))
+2. ∀x (¬PerformsInTalentShowsOften(x) → InactiveDisinterested(x))   // exclusive: perform or inactive
+3. ∀x (ChaperonesDances(x) → ¬Student(x))
+4. ∀x (InactiveDisinterested(x) → ChaperonesDances(x))
+5. ∀x ((YoungChild(x) ∨ Teenager(x)) ∧ WantsAcademicCareer(x) → Student(x))
+6. Bonnie is either:
+   (a) Attends(Bonnie) ∧ Engaged(Bonnie) ∧ Student(Bonnie),  
+   or  
+   (b) ¬Attends(Bonnie) ∧ ¬Engaged(Bonnie) ∧ ¬Student(Bonnie)
+
+
+
+### Target Statement:
+If Bonnie either chaperones high school dances or (if she does not, then she performs in school talent shows often),  
+then Bonnie is both:
+- (Young child or teenager who wants to further academic career), and  
+- Inactive and disinterested.
+
+FOL:  
+(ChaperonesDances(Bonnie) ∨ (¬ChaperonesDances(Bonnie) → Performs(Bonnie)))  
+→ ((YoungChild(Bonnie) ∨ Teenager(Bonnie)) ∧ WantsAcademicCareer(Bonnie) ∧ InactiveDisinterested(Bonnie))
+
+---
+
+### Reasoning:
+```json
+{{
+  "verdict": "False",
+  "explanation": [
+    "We examine the implication: If A then B, where A is a disjunction with a conditional, and B is a three-part conjunction.",
+    "A = ChaperonesDances(Bonnie) ∨ (¬ChaperonesDances(Bonnie) → Performs(Bonnie))",
+    "Assume A holds (antecedent true), and test if B holds in each case.",
+    "",
+    "Case 1: ChaperonesDances(Bonnie) is true.",
+    "→ From premise (3): Chaperones ⇒ ¬Student",
+    "→ From premise (6): if Bonnie is not a student ⇒ she is not attending or engaged either.",
+    "→ So we are in disjunct (b): ¬Attends, ¬Engaged, ¬Student.",
+    "→ From (2): if not performing, then InactiveDisinterested.",
+    "→ From (4): InactiveDisinterested ⇒ Chaperones → consistent.",
+    "Now check if conclusion B holds:",
+    "- It requires InactiveDisinterested(Bonnie) AND being a young child/teenager who wants academic career.",
+    "- But from (5): such individuals ⇒ Student(Bonnie)",
+    "- Contradiction: We already have ¬Student(Bonnie)",
+    "⇒ Cannot be both Student and ¬Student ⇒ contradiction ⇒ B is false.",
+    "",
+    "Case 2: ¬ChaperonesDances(Bonnie) → Performs(Bonnie)",
+    "Suppose ChaperonesDances(Bonnie) is false ⇒ so must Perform(Bonnie) hold.",
+    "→ From (1): Performs ⇒ Attends ∧ Engaged",
+    "→ From (6): then Bonnie must also be Student(Bonnie)",
+    "→ From (2): since she performs ⇒ ¬InactiveDisinterested(Bonnie)",
+    "Conclusion B requires InactiveDisinterested ⇒ contradiction.",
+    "Also requires YoungChild/Teenager + WantsAcademicCareer ⇒ Student ⇒ already true.",
+    "But again, Student + InactiveDisinterested contradicts context.",
+    "",
+    "In both cases, the conclusion fails even when the antecedent holds.",
+    "Therefore, the implication is logically false.",
+    "Therefore, the statement is False."
+  ]
+}}
+
+
+
+You are a **formal reasoning assistant** specialized in **symbolic logic and deductive inference**.
+
+Your task is to determine whether a **single target statement** can be **strictly and deductively derived** from a set of **explicit logical premises**, using **only first-order logic rules**.
+
+This task is grounded in the structure of the **FOLIO dataset**, where each input includes:
+- A list of formal or quasi-formal premises (including universal rules, facts, negations, disjunctions),
+- A single target hypothesis (the candidate conclusion).
+
+You must judge whether this target can be **provably true** given the premises — and only the premises.
+
+---
+
+## Inference Objective:
+
+Your goal is to determine if there exists a **complete and valid deductive chain** from the premises to the target statement.  
+- Output `"True"` **only** if such a deductive chain exists.
+- Output `"Uncertain"` if no such chain can be formed using valid logical rules.
+
+⚠ You must not:
+- Assume any background or common-sense knowledge,
+- Fill in missing facts or infer likely intentions,
+- Use probabilistic or abductive reasoning.
+
+---
+
+## Deductive Tools You May Use:
+
+1. **Universal Instantiation**  
+   - Rule: ∀x P(x) ⇒ P(a)  
+   - Apply to derive facts about specific individuals from general statements.
+
+2. **Modus Ponens**  
+   - Rule: P → Q and P ⇒ Q  
+   - The foundation of most single-step deductions.
+
+3. **Conjunction Introduction & Elimination**  
+   - From A and B, deduce A ∧ B. From A ∧ B, deduce A and B.  
+   - Use to fulfill compound conditions in rules.
+
+4. **Compound Antecedent Matching**  
+   - If a rule requires multiple conditions (e.g., A(x) ∧ B(x) → C(x)), you may match those from separate premises.
+
+5. **Multi-step Forward Chaining**  
+   - Combine two or more rules:  
+     E.g., A(x) → B(x), B(x) → C(x) ⇒ A(x) → C(x)
+
+6. **Contrapositive Reasoning & Negation Inference**  
+   - ∀x (P(x) → ¬Q(x))  
+   - If Q(x) is true, infer ¬P(x); or use rules to eliminate possibilities.
+
+7. **Class Hierarchy or Inheritance Chaining**  
+   - If A is a subclass of B and B of C, then A is also C:  
+     E.g., ∀x (Greek(x) → Human(x)), ∀x (Human(x) → Mortal(x))  
+     ⇒ Greek(Socrates) ⇒ Mortal(Socrates)
+
+---
+
+## Special FOLIO-Specific Guidance:
+
+- FOLIO contexts often include **exclusive disjunctions**, **negation-based identity rules**, or **structural equivalences** (e.g., someone is either a student or not a student, and this links to other roles).
+- Use case analysis if the premises involve mutually exclusive cases (e.g., "either A or B").
+- Disjunctive inputs may not allow you to isolate which branch is active — in such cases, if both options lead to truth, you may conclude `"True"`; otherwise, `"Uncertain"`.
+
+---
+
+## Input Format:
+
+### Premises:
+{premises}
+
+### Target Statement:
+{target_statement}
+
+---
+Return your answer strictly in the format below.  
+⚠️ Do **not** return anything outside this block — no markdown, no LaTeX, no extra commentary.
+
+## Output Format:
+
+```json
+{{
+  "verdict": "True" | "Uncertain",
+  "explanation": [
+    "Step-by-step justification...",
+    "...",
+    "Therefore, the statement is (True/Uncertain)."
+  ]
+}}
+```
+------
+Below are some examples:
+---
+# Example 1：
+
+Premises:
+1. ∃x (BasketballPlayer(x) ∧ ¬American(x))  
+2. ∀x (BasketballPlayer(x) → Tall(x))  
+3. ∀x (Tall(x) → WearsLargeShoes(x))  
+4. ∀x (WearsLargeShoes(x) → WearsLargeClothes(x))  
+5. ¬WearsLargeClothes(Yuri)
+
+Target Statement:
+Yuri is not an American basketball player.  
+FOL: ¬(American(Yuri) ∧ BasketballPlayer(Yuri))
+
+Reasoning:
+{{
+  "verdict": "True",
+  "explanation": [
+    "Assume for contradiction: Yuri is an American basketball player",
+    "→ BasketballPlayer(Yuri) and American(Yuri)",
+    "From (2): BasketballPlayer(Yuri) → Tall(Yuri) → So Tall(Yuri)",
+    "From (3): Tall(Yuri) → WearsLargeShoes(Yuri) → So WearsLargeShoes(Yuri)",
+    "From (4): WearsLargeShoes(Yuri) → WearsLargeClothes(Yuri) → So WearsLargeClothes(Yuri)",
+    "But (5): ¬WearsLargeClothes(Yuri) → Contradiction",
+    "Therefore: Yuri cannot be a basketball player (regardless of nationality)",
+    "→ Hence, Yuri is not an American basketball player",
+    "Therefore, the statement is True."
+  ]
+}}
+
+---
+### Example 2：
+
+Premises:
+1. ∀x (PerformsInTalentShowsOften(x) → EngagedInSchoolEvents(x) ∧ AttendsSchool(x))
+2. ∀x (¬PerformsInTalentShowsOften(x) → InactiveDisinterested(x))   // from the disjunction
+3. ∀x (ChaperonesDances(x) → ¬Student(x))
+4. ∀x (InactiveDisinterested(x) → ChaperonesDances(x))
+5. ∀x ((YoungChild(x) ∨ Teenager(x)) ∧ WantsAcademicCareer(x) → Student(x))
+6. Bonnie either:
+   (a) EngagedInSchoolEvents(Bonnie) ∧ AttendsSchool(Bonnie) ∧ Student(Bonnie),  
+   or  
+   (b) ¬EngagedInSchoolEvents(Bonnie) ∧ ¬AttendsSchool(Bonnie) ∧ ¬Student(Bonnie)
+
+Target Statement:
+If Bonnie is either both a young child or teenager who wishes to further her academic career and chaperones high school dances,  
+or neither is a young child nor teenager who wishes to further her academic career,  
+then Bonnie is either a student who attends the school or an inactive and disinterested member of the community.
+
+FOL (rephrased logically):  
+If [(YoungOrTeen(Bonnie) ∧ WantsAcademicCareer(Bonnie) ∧ ChaperonesDances(Bonnie)) ∨  
+     (¬YoungOrTeen(Bonnie) ∧ ¬WantsAcademicCareer(Bonnie))],  
+then [Student(Bonnie) ∨ InactiveDisinterested(Bonnie)]
+
+Reasoning:
+{{
+  "verdict": "True",
+  "explanation": [
+    "Case 1: Bonnie is a young child or teenager AND wants an academic career AND chaperones dances",
+    "→ From (5): Young/Teen + WantsAcademicCareer → Student(Bonnie)",
+    "→ But (3): ChaperonesDances → ¬Student(Bonnie)",
+    "→ Contradiction: So this case cannot occur — antecedent leads to inconsistency ⇒ implication holds vacuously",
+    "Case 2: Bonnie is not a young child or teenager who wants an academic career",
+    "→ Then (5) does not apply",
+    "→ We don't know if she's a student, but could be InactiveDisinterested",
+    "From (6): Bonnie is either (attending+engaged+student) or (none of those)",
+    "→ In the second case: not student ⇒ possibly InactiveDisinterested",
+    "→ Then from (4): ChaperonesDances",
+    "Therefore, in both branches, the conclusion (Bonnie is student OR inactive/disinterested) holds",
+    "Therefore, the statement is True."
+  ]
+}}
+
+---
+## Example 3:
+
+### Premises:
+1. ∀x (SchedulesMeeting(x) → AppearsCompanyToday(x))  
+2. ∀x (HasLunchAtCompany(x) → SchedulesMeeting(x))  
+3. ∀x (HasLunchAtCompany(x) ∨ HasLunchAtHome(x)) // lunch: either company or home  
+4. ∀x (HasLunchAtHome(x) → WorksRemotely(x))  
+5. ∀x (InOtherCountries(x) → WorksRemotely(x))  
+6. ∀x (Manager(x) → ¬WorksRemotely(x))  
+7. James is either:  
+ (a) Manager ∧ AppearsCompanyToday  
+ or  
+ (b) ¬Manager ∧ ¬AppearsCompanyToday
+
+
+### Target Statement:
+If James is either a manager or in other countries,  
+then James either has lunch at home and works remotely from home,  
+or neither has lunch at home nor works remotely from home.  
+
+FOL:  
+(Manager(James) ∨ InOtherCountries(James)) →  
+( (HasLunchAtHome(James) ∧ WorksRemotely(James)) ∨  
+  (¬HasLunchAtHome(James) ∧ ¬WorksRemotely(James)) )
+
+### Reasoning:
+```json
+{{
+  "verdict": "True",
+  "explanation": [
+    "We evaluate the implication: If (Manager ∨ InOtherCountries), then (LunchHome ∧ Remote) ∨ (¬LunchHome ∧ ¬Remote).",
+    "Split into two cases based on the antecedent disjunction:"
+    ,
+    "Case 1: Manager(James)",
+    "From (6): Manager ⇒ ¬WorksRemotely.",
+    "Now analyze RHS of implication:",
+    "- Since WorksRemotely is false, for (LunchHome ∧ Remote) to be true, both parts must be true — but one is false.",
+    "- So (LunchHome ∧ Remote) is false.",
+    "- But if ¬WorksRemotely holds, then (¬LunchHome ∧ ¬Remote) can hold if LunchHome is also false.",
+    "- From (3), James either has lunch at home or at company.",
+    "- If he has lunch at company, then ¬LunchHome holds.",
+    "- So ¬LunchHome ∧ ¬Remote holds.",
+    "⇒ RHS of implication holds in this case.",
+    ,
+    "Case 2: InOtherCountries(James)",
+    "From (5): InOtherCountries ⇒ WorksRemotely.",
+    "Then for RHS to be true, either:",
+    "- (LunchHome ∧ Remote): if LunchHome true → valid.",
+    "- or (¬LunchHome ∧ ¬Remote): but Remote is true, so this branch fails.",
+    "→ Therefore, RHS must rely on (LunchHome ∧ Remote).",
+    "From (4): LunchHome ⇒ Remote, so if Remote is true, LunchHome may or may not be true.",
+    "But we cannot guarantee ¬LunchHome.",
+    "However, if LunchHome is true, then (LunchHome ∧ Remote) holds ⇒ RHS satisfied.",
+    "→ If LunchHome is false, then ¬LunchHome ∧ Remote is not a valid RHS branch, so implication fails.",
+    "But this is not the case — nothing contradicts LunchHome being true.",
+    "Therefore, RHS can be satisfied in this case too.",
+    ,
+    "In both cases, at least one disjunct in the RHS holds whenever the antecedent is true.",
+    "Therefore, the implication holds universally.",
+    "Therefore, the statement is True."
+  ]
+}}

@@ -1,0 +1,211 @@
+You are a reasoning expert skilled in formal logic and semiotic analysis.Your task is to analyze a **complex logical proposition** from the RepublicQA dataset using the **Greimas Semiotic Square**. This framework decomposes a proposition into four logically interrelated positions: the original statement (S1), its semantic contrary (S2), and their respective logical negations (¬S1, ¬S2).
+
+## Core Proposition Extraction
+
+When analyzing the input question, first extract the core proposition:
+- **Most importantly** If the question asks "Is the statement 'X' correct/true?", extract X as the core proposition **S1**
+- If the question contains quoted text, use the quoted content as the core proposition
+- **For nested quotes**: Extract only the innermost quoted statement
+- Preserve the original wording exactly - do not add qualifiers or conditions
+- Pay special attention to absolute claims (e.g., "always", "never", "all", "is defined as")
+- **Maintain the logical structure**: If the original contains "X is always Y", keep the "always" in S1
+
+## Context-Based Reasoning Priority
+
+Before determining concept opposition, analyze the context to understand:
+- What premises support or challenge the core proposition
+- What logical tensions exist in the given context
+- How the context frames the philosophical problem
+
+## Concept Opposition Guidance
+
+When extracting opposing concepts (A vs B), prioritize the following types of semantic opposition based on the context:
+
+### 1. **Authority vs Independent Judgment** (HIGHEST PRIORITY for governance/obedience statements)
+- obedience_to_authority vs moral_independent_judgment
+- formal_compliance vs substantive_ethics
+- rule_following vs principle_based_reasoning
+
+### 2. **Absolutist vs Contextual** (HIGH PRIORITY for "always" statements)
+- universal_application vs contextual_consideration
+- absolute_rule vs situational_ethics
+- invariant_principle vs circumstantial_judgment
+
+### 3. **Moral Opposition**
+- just vs unjust, good vs evil, right vs wrong
+- virtuous vs vicious, moral vs immoral
+- beneficial vs harmful
+
+### 4. **Behavioral Opposition**
+- help vs harm, benefit vs hurt, protect vs attack
+- support vs oppose, assist vs hinder
+
+### 5. **Relational Opposition**
+- friend vs enemy, ally vs opponent
+- insider vs outsider, member vs non-member
+
+### 6. **Factual Opposition**
+- truth vs lie, real vs virtual
+- true vs false, right vs wrong
+
+### Selection Priority
+For statements involving justice, morality, or ethics:
+- ✅ **Strong opposition**: benefiting vs harming, helping vs hurting, just vs unjust
+- ❌ **Weak opposition**: interest of stronger vs interest of weaker
+If no moral, relational, or behavioral opposition applies, use factual oppositions (e.g., true vs false).
+Your task is to analyze a **complex logical proposition** from the RepublicQA dataset using the **Greimas Semiotic Square**. This framework decomposes a proposition into four logically interrelated positions: the original statement (S1), its semantic contrary (S2), and their respective logical negations (¬S1, ¬S2).
+------
+Step 1 – Identify the core proposition
+
+- **S1** must be **identical in wording and logic** to the original question statement.
+- **S2** should be a **semantic contrary** to S1 — i.e., a proposition that **cannot be true at the same time** as S1, but **can be false simultaneously**.
+- ⚠️ **Important**: Only when no meaningful contrary can be identified, use the **logical negation** of S1 as S2 (i.e., contradiction), and set `"S2_type": "contradictory"`.
+- Use existing entities and predicates from the context — do **not** invent new ones.
+
+- S2_type determination checklist:
+    - If S1 and S2 **cannot be true simultaneously** but **can be false together** → `contrary`
+    - If S2 is **exact logical negation** of S1 → `contradictory`
+
+- ¬S1 and ¬S2 are strict logical negations of S1 and S2 respectively.
+
+------
+Step 2 – Build the Semiotic Square
+
+Define the four positions as follows:
+
+- **S1**: Original target proposition → FOL: (as close to formal logic as possible)
+- **S2**: Semantic contrary to S1 (or contradiction if contrary is not available)
+- **¬S1**: Logical negation of S1
+- **¬S2**: Logical negation of S2
+
+------
+Required Semantic Relationships:
+
+- S1 ⊥ S2   S1 and S2 are **semantic contraries**, not mere negations (if available)
+- S1 ⇒ ¬S2  and S2 ⇒ ¬S1
+- ¬S1 ∪ ¬S2  covers the full semantic space
+
+------
+## First-Order Logic Grammar:
+
+The following grammar rules define the valid syntax for FOL expressions:
+
+1. **Conjunction** (and): `expr1 ∧ expr2`
+2. **Disjunction** (inclusive or): `expr1 ∨ expr2`
+3. **Exclusive Disjunction** (xor): `expr1 ⊕ expr2`
+4. **Negation** (not): `¬expr1`
+5. **Implication** (if ... then): `expr1 → expr2`
+6. **Biconditional** (if and only if): `expr1 ↔ expr2`
+7. **Universal Quantifier** (for all x): `∀x (...)`
+8. **Existential Quantifier** (there exists x): `∃x (...)`
+
+------
+Below is an example:
+
+Question: Is the statement "repaying a dept is always just" correct?
+
+- concept_A: just
+- concept_B: unjust
+
+- S1  
+  Statement: Repayment of debt is always just.  
+  FOL: ∀x (Debt(x) ∧ Repaid(x) → Just(x))
+
+- S2 
+  Statement: Repaying depts to mentally incapacitated individuals is unjust.  
+  FOL: ∀x (Deposit(x) ∧ MentallyIncapacitated(x) → ¬Just(Return(x)))
+
+- ¬S1  
+  Statement: Repayment of debt is not always just.  
+  FOL: ∃x (Debt(x) ∧ Repaid(x) ∧ ¬Just(x))
+
+- ¬S2  
+  Statement: Returning depts to mentally incapacitated individuals is just.  
+  FOL: ∃x (Dept(x) ∧ MentallyIncapacitated(x) ∧ Just(Return(x)))
+"S2_type": "contrary"
+
+Below is another example.
+
+Question: Is the statement "repaying a dept is always just" correct?
+
+- concept_A: just
+- concept_B: unjust
+
+- S1 
+  Statement: Repayment of debt is always just.  
+  FOL: ∀x (Debt(x) ∧ Repaid(x) → Just(x))
+
+- S2  
+  Statement: Repayment of debt is not always just. 
+  FOL: ∃x (Debt(x) ∧ Repaid(x) ∧ ¬Just(x))
+
+- ¬S1  
+  Statement: Repayment of debt is not always just.  
+  FOL: ∃x (Debt(x) ∧ Repaid(x) ∧ ¬Just(x))
+
+- ¬S2  
+  Statement: Repayment of dept is always just.  
+  FOL: ∀x (Debt(x) ∧ Repaid(x) → Just(x))
+"S2_type": "contradictory"
+
+Below is another example.
+
+Question: Is the statement "Justice is always the interest of the stronger" correct?
+
+- concept_A: stronger
+- concept_B: weaker
+
+- S1  
+  Statement: Justice is always the interest of the stronger.  
+  FOL: ∀x (Justice(x) → InterestOfStronger(x))
+
+- S2  
+  Statement: Justice is always the interest of the weaker.  
+  FOL: ∀x (Justice(x) → InterestOfWeaker(x))
+
+- ¬S1  
+  Statement: Justice is not always the interest of the stronger.  
+  FOL: ∃x (Justice(x) ∧ ¬InterestOfStronger(x))
+
+- ¬S2  
+  Statement: Justice is not always the interest of the weaker.  
+  FOL: ∃x (Justice(x) ∧ ¬InterestOfWeaker(x))
+
+S2_type: contrary
+
+------
+Now analyze the following statement using this framework.
+
+Context:
+{context}
+
+Question:
+{question}
+
+Return your answer strictly in the format below.  
+⚠️ Do **not** return anything outside this block — no markdown, no LaTeX, no extra commentary.
+```json
+{{
+  "concept_A": "...",
+  "concept_B": "...",
+  "S1": {{
+    "statement": "...",
+    "FOL": "..."
+  }},
+  "S2": {{
+    "statement": "...",
+    "FOL": "..."
+  }},
+  "not_S1": {{
+    "statement": "...",
+    "FOL": "..."
+  }},
+  "not_S2": {{
+    "statement": "...",
+    "FOL": "..."
+  }}
+  "S2_type": "contrary" | "contradictory"
+}}
+```
+------
+Always remember to output the type of s2!Based on the truth you should output the correct type.

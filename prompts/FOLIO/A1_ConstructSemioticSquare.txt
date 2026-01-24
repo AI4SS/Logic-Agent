@@ -1,0 +1,201 @@
+You are a symbolic reasoning expert skilled in formal logic and semiotic analysis.
+
+Your task is to analyze a **complex logical proposition** from the FOLIO dataset using the **Greimas Semiotic Square**. This framework decomposes a proposition into four logically interrelated positions: the original statement (S1), its semantic contrary (S2), and their respective logical negations (¬S1, ¬S2).
+
+------
+Step 1 – Identify the core proposition
+
+- **S1** must be **identical in wording and logic** to the original question statement.
+- **S2** should be a **semantic contrary** to S1 — i.e., a proposition that **cannot be true at the same time** as S1, but **can be false simultaneously**.
+- If no meaningful contrary can be found, use the **logical negation** of S1 as S2 (i.e., contradiction), and label `"S2_type": "contradictory"`.
+- Use existing entities and predicates from the context — do **not** invent new ones.
+- ¬S1 and ¬S2 are strict logical negations of S1 and S2 respectively.
+
+------
+Step 2 – Build the Semiotic Square
+
+Define the four positions as follows:
+
+- **S1**: Original target proposition → FOL: (as close to formal logic as possible)
+- **S2**: Semantic contrary to S1 (or contradiction if contrary is not available)
+- **¬S1**: Logical negation of S1
+- **¬S2**: Logical negation of S2
+
+Also return `"S2_type"` to specify the type of opposition:
+- `"contrary"` if S2 is semantically opposed to S1
+- `"contradictory"` if S2 is simply the negation of S1
+
+------
+Required Semantic Relationships:
+
+- S1 ⊥ S2   S1 and S2 are **semantic contraries**, not mere negations (if available)
+- S1 ⇒ ¬S2  and S2 ⇒ ¬S1
+- ¬S1 ∪ ¬S2  covers the full semantic space
+
+------
+## First-Order Logic Grammar:
+
+The following grammar rules define the valid syntax for FOL expressions:
+
+1. **Conjunction** (and): `expr1 ∧ expr2`  
+2. **Disjunction** (inclusive or): `expr1 ∨ expr2`  
+3. **Exclusive Disjunction** (xor): `expr1 ⊕ expr2`  
+4. **Negation** (not): `¬expr1`  
+5. **Implication** (if ... then): `expr1 → expr2`  
+6. **Biconditional** (if and only if): `expr1 ↔ expr2`  
+7. **Universal Quantifier** (for all x): `∀x (...)`  
+8. **Existential Quantifier** (there exists x): `∃x (...)`
+
+------
+
+Below is an example:
+
+Context:
+If people own a large desktop monitor at their home, then they work regularly and often at home.
+All people who have a fully stocked and impressive home office are people who own a large desktop monitor at their home.
+All people who work regularly and often at home spend their free time tidying and organizing the spaces in their homes.
+All people who work regularly and often at home visit the office supply store regularly.
+If people spend their free time tidying and organizing the spaces in their home, then they do not go to bed late and wake up every day after noon.
+Remy either both goes to bed late and wakes up every day after noon and spends their free time tidying and organizing the spaces in their home, or they do not go to bed late and wake up every day after noon nor spend their free time tidying and organizing the spaces in their home.
+
+Question:
+Based on the above information, is the following statement true, false, or uncertain?
+If Remy either goes to bed late and wakes up every day after noon or visits the office supply store regularly, then Remy neither spends their free time tidying and organizing the spaces in their home nor has a fully stocked and impressive home office.
+
+
+Semiotic Square:  
+{{
+  "S1": {{
+    "statement": "If Remy either goes to bed late and wakes up every day after noon or visits the office supply store regularly, then Remy neither spends their free time tidying and organizing the spaces in their home nor has a fully stocked and impressive home office.",
+    "FOL": "(LateSleeper(Remy) ∨ VisitsOfficeStore(Remy)) → (¬Tidies(Remy) ∧ ¬HasHomeOffice(Remy))"
+  }},
+  "S2": {{
+    "statement": "If Remy either goes to bed late and wakes up every day after noon or visits the office supply store regularly, then Remy both spends their free time tidying and organizing and has a fully stocked and impressive home office.",
+    "FOL": "(LateSleeper(Remy) ∨ VisitsOfficeStore(Remy)) → (Tidies(Remy) ∧ HasHomeOffice(Remy))"
+  }},
+  "not_S1": {{
+    "statement": "It is not the case that if Remy either goes to bed late and wakes up every day after noon or visits the office supply store regularly, then Remy neither tidies nor has a home office.",
+    "FOL": "¬[(LateSleeper(Remy) ∨ VisitsOfficeStore(Remy)) → (¬Tidies(Remy) ∧ ¬HasHomeOffice(Remy))]"
+  }},
+  "not_S2": {{
+    "statement": "It is not the case that if Remy either goes to bed late and wakes up every day after noon or visits the office supply store regularly, then Remy both tidies and has a home office.",
+    "FOL": "¬[(LateSleeper(Remy) ∨ VisitsOfficeStore(Remy)) → (Tidies(Remy) ∧ HasHomeOffice(Remy))]"
+  }},
+  "S2_type": "contrary"
+}}
+
+---
+Below is an example:
+
+Context:
+No students who work in the library are from the computer science department.  
+All students who have part-time jobs offered by the university are students who work in the library.  
+All students who take the database course are from the computer science department.  
+All students instructed by professor David are taking the database course.  
+All students working in the lab are instructed by professor David.  
+James is a student working in the lab.  
+Jack neither has a part-time job offered by the university nor works in the lab.
+
+Question:
+Based on the above information, is the following statement true, false, or uncertain?  
+James has a part-time job offered by the university.
+
+
+Semiotic Square：
+{{
+  "S1": {{
+    "statement": "James has a part-time job offered by the university.",
+    "FOL": "PartTimeJob(James)"
+  }},
+  "S2": {{
+    "statement": "James works in the library.",
+    "FOL": "WorksInLibrary(James)"
+  }},
+  "not_S1": {{
+    "statement": "James does not have a part-time job offered by the university.",
+    "FOL": "¬PartTimeJob(James)"
+  }},
+  "not_S2": {{
+    "statement": "James does not work in the library.",
+    "FOL": "¬WorksInLibrary(James)"
+  }},
+  "S2_type": "contrary"
+}}
+
+**Explanation (not part of output)**:  
+S1 ⇒ S2 holds because all students with part-time jobs work in the library.  
+S2 contradicts what is known about James being in the computer science department (since students who work in the library are not from CS).  
+Therefore, S1 and S2 form a semantic contrariety:  
+- They **cannot both be true**  
+- They **can both be false**  
+- Their opposition arises from an implication chain and a contextual inconsistency
+
+---
+Context:
+Robert Lewandowski is a striker.  
+[BG] Strikers are soccer players.  
+Robert Lewandowski left Bayern Munchen.  
+[BG] If a player left a team they no longer play for that team.
+
+Question:
+Based on the above information, is the following statement true, false, or uncertain?  
+Robert Lewandowski is a star.
+
+Semiotic Square：
+{{
+  "S1": {{
+    "statement": "Robert Lewandowski is a star.",
+    "FOL": "Star(RobertLewandowski)"
+  }},
+  "S2": {{
+    "statement": "Robert Lewandowski is not a star.",
+    "FOL": "¬Star(RobertLewandowski)"
+  }},
+  "not_S1": {{
+    "statement": "Robert Lewandowski is not a star.",
+    "FOL": "¬Star(RobertLewandowski)"
+  }},
+  "not_S2": {{
+    "statement": "Robert Lewandowski is a star.",
+    "FOL": "Star(RobertLewandowski)"
+  }},
+  "S2_type": "contradictory"
+}}
+
+------
+## Input Format:
+
+Context:  
+{context}
+
+Question:  
+{question}
+
+------
+Return your answer strictly in the format below.  
+⚠️ Do **not** return anything outside this block — no markdown, no LaTeX, no extra commentary.
+
+## Output Format:
+```json
+{{
+  "S1": {{
+    "statement": "...",
+    "FOL": "..."
+  }},
+  "S2": {{
+    "statement": "...",
+    "FOL": "..."
+  }},
+  "not_S1": {{
+    "statement": "...",
+    "FOL": "..."
+  }},
+  "not_S2": {{
+    "statement": "...",
+    "FOL": "..."
+  }},
+  "S2_type": "contrary" | "contradictory"
+}}
+```
+
+

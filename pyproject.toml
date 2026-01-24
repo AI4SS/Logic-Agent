@@ -1,0 +1,21 @@
+[project]
+name = "philagent"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "BladeY1",email = "1328370638@qq.com"}
+]
+readme = "README.md"
+requires-python = "<3.12,>=3.9"
+dependencies = [
+    "metagpt (>=0.8.2,<0.9.0)",
+    "nltk (>=3.9.1,<4.0.0)",
+    "levenshtein (>=0.27.1,<0.28.0)",
+    "transformers (>=4.0.0,<5.0.0)",
+    "textstat (>=0.7.3)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
