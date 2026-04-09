@@ -1,4 +1,9 @@
-# <img src="assets/philosopher_icon.png" width="40" valign="middle"> LogicAgent: From Ambiguity to Verdict
+<p align="center">
+  <h1>
+    <img src="assets/philosopher_icon.png" width="40" style="vertical-align: middle;" />
+    LogicAgent: From Ambiguity to Verdict
+  </h1>
+</p>
 
 <p align="center">
   <a href="https://arxiv.org/abs/2509.24765">
