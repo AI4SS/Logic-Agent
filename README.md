@@ -1,8 +1,17 @@
-# <img src="assets/philosopher_icon.png" width="40" style="vertical-align: middle;"> LogicAgent: From Ambiguity to Verdict
+# <img src="assets/philosopher_icon.png" width="40" valign="middle"> LogicAgent: From Ambiguity to Verdict
 
-[![arXiv](https://img.shields.io/badge/arXiv-2509.24765-b31b1b.svg)](https://arxiv.org/abs/2509.24765)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<p align="center">
+  <a href="https://arxiv.org/abs/2509.24765">
+    <img src="https://img.shields.io/badge/arXiv-2509.24765-b31b1b.svg" />
+  </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+  </a>
+</p>
 
+<p align="center">
+  <em>Accepted by ACL 2026 Main</em>
+</p>
 
 Official implementation of the paper: **"Semantic-Aware Logical Reasoning via a Semiotic Framework"**.
 
