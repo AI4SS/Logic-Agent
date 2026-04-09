@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
-Official implementation of the paper: **"From Ambiguity to Verdict: A Semiotic-Grounded Multi-Perspective Agent for LLM Logical Reasoning"**.
+Official implementation of the paper: **"Semantic-Aware Logical Reasoning via a Semiotic Framework"**.
 
 ---
 
