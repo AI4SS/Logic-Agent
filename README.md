@@ -96,11 +96,14 @@ poetry run python3 analyze/analyze.py
 If you find our work or code useful, please cite:
 
 ```bibtex
-@article{zhang2025ambiguity,
-  title={From Ambiguity to Verdict: A Semiotic-Grounded Multi-Perspective Agent for LLM Logical Reasoning},
-  author={Zhang, Yunyao and Zhang, Xinglang and Sheng, Junxi and Li, Wenbing and Yu, Junqing and Yang, Wei and Song, Zikai},
-  journal={arXiv preprint arXiv:2509.24765},
-  year={2025}
+@misc{zhang2026semanticawarelogicalreasoningsemiotic,
+      title={Semantic-Aware Logical Reasoning via a Semiotic Framework}, 
+      author={Yunyao Zhang and Xinglang Zhang and Junxi Sheng and Wenbing Li and Junqing Yu and Yi-Ping Phoebe Chen and Wei Yang and Zikai Song},
+      year={2026},
+      eprint={2509.24765},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2509.24765}, 
 }
 ```
 
